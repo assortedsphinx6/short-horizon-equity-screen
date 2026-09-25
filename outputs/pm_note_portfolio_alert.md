@@ -1,0 +1,11 @@
+# Portfolio alert: proposed operational defaults
+
+This is a conceptual proposal, not an implemented or tested alert. Agree these provisional defaults with the PM before production.
+
+“Doing well” means a live position has a signed marked-to-market gain of at least 1% of its entry notional, after estimated trading costs. Reverse the price-move direction for shorts. This avoids counting tiny price noise. Together, the qualifying positions must contribute at least 0.25% of current portfolio NAV, so the alert is economically material. Use unrealized gains on remaining live quantity, allocate entry and estimated exit costs to that quantity, and show realized gains separately. Use a weighted entry basis for partial fills; do not reset the entry timestamp when adding to a position.
+
+“Quickly” means entered in the preceding 60 minutes, measuring gain since entry: an actionable intraday horizon. Older positions accelerating recently are outside this definition. “Many” means at least three distinct live positions and at least 30% of all currently open positions meet that age and gain criterion. Three prevents a two-position book from looking broad; 30% prevents a large book triggering on three isolated winners. Consolidate duplicate legs by economic exposure and show sector concentration.
+
+Check every five minutes during the regular session. Require the full condition on two consecutive checks, then fire once and disarm. Five-minute cadence and two confirmations reduce transient noise. Rearm only after two consecutive nonqualifying checks AND at least 60 minutes since the last alert; then require two fresh qualifying checks. The hour cooldown limits repetition. Unknown or stale data cannot count as a qualifying or nonqualifying check; suppress notification and reset consecutive-check counters until reliable marks return.
+
+Include timestamp, winners/open-position denominator, NAV contribution, top drivers, mark freshness, and realized versus unrealized gains. Guard against stale or zero marks, partial fills, reversals, correlated legs, and winners masking a catastrophic loser; report the largest loss alongside the alert. This needs authenticated positions, marks, fees, NAV and timestamps. Replay internal position/mark streams to assess alert burden and missed episodes before tuning any defaults; public stock OHLCV cannot validate it.
