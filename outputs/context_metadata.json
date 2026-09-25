@@ -1,0 +1,123 @@
+{
+  "decision_date": "2026-09-24",
+  "context_cutoff_utc": "2026-09-25T00:00:00+00:00",
+  "generated_at_utc": "2026-09-25T19:39:36.345190+00:00",
+  "current_scope": true,
+  "offline_replay": true,
+  "warnings": [
+    "SEC ticker map unavailable: HTTPError: 403 Client Error: Forbidden for url: https://www.sec.gov/files/company_tickers.json"
+  ],
+  "requests": [
+    {
+      "url": "https://www.sec.gov/files/company_tickers.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:27:08.163565+00:00",
+      "http_status": 403,
+      "error": "HTTPError: 403 Client Error: Forbidden for url: https://www.sec.gov/files/company_tickers.json",
+      "cache_file": "cache/context/20260925T000000Z/3e337ea0f65526bcde4079b0dc1122e5d760f2d147c941d986930176c58a6da3.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:27:08.329284+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/1f1c090e7bf42861a03b3096c2ad922accd068e23438adf24ffd725edc04040f.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0001437107.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:27:08.722131+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/cc72778dc7b688ace3c92cbf47cf43f3667962deb5154dd5c8b5b9d03e524289.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0000004127.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:27:33.863700+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/2679be37f664447ce831e65407e22c4406f9182f65888466731a4e675e2b915f.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0000936395.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:27:57.118975+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/d0dedd40203f59675d534ac7eb10d9a8d22bd1cb977db6cbe052316afe32cf86.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0000804328.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:28:19.754935+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/87e445e7ae76d94cda3e4002875c3f47cea24754757f6ed704b0b8354361a3bd.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0000002488.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:28:42.476282+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/8eeb3d1f94753e343a4aa65b48ecd361b7cffb356c88eadbcaa676748ec87844.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0001093557.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:29:07.537512+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/ace879ef55d8119b0eba2cf6a8f2e6f9d8891b6ae9fcb3e4d80b7bd2e374ddbb.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0001679788.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:25:49.863217+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/da19834ebd529552a320c3c8cd0d0a4b354702f07da4bceb8eb0c0d123af01a8.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0001048695.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:26:02.070338+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/d34feb1f4263b48d3891aca0113f01be9a45571661fc16dfe772bc13a3482a8a.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0001535527.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:26:14.275687+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/2929aa4f4f5405f6284bee8e114adc6bf0b5c13232c8702a2a2d7c50fb99b658.json",
+      "offline_replay": true
+    },
+    {
+      "url": "https://data.sec.gov/submissions/CIK0000050863.json",
+      "params": {},
+      "fetched_at_utc": "2026-09-25T18:26:26.488764+00:00",
+      "http_status": 200,
+      "error": null,
+      "cache_file": "cache/context/20260925T000000Z/2871a2ceb568ce8e8bb3316ef9ff72f5423ece92b4a2ece5bd027cf5849810cd.json",
+      "offline_replay": true
+    }
+  ],
+  "sec_status_counts": {
+    "none": 10
+  }
+}

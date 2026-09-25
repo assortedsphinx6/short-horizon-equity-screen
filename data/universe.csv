@@ -1,0 +1,504 @@
+original_symbol,company_name,sector,ticker,source_url,fetched_at_utc
+A,Agilent Technologies,Health Care,A,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AAPL,Apple Inc.,Information Technology,AAPL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ABBV,AbbVie,Health Care,ABBV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ABNB,Airbnb,Consumer Discretionary,ABNB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ABT,Abbott Laboratories,Health Care,ABT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ACGL,Arch Capital Group,Financials,ACGL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ACN,Accenture,Information Technology,ACN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ADBE,Adobe Inc.,Information Technology,ADBE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ADI,Analog Devices,Information Technology,ADI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ADM,Archer Daniels Midland,Consumer Staples,ADM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ADP,Automatic Data Processing,Industrials,ADP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ADSK,Autodesk,Information Technology,ADSK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AEE,Ameren,Utilities,AEE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AEP,American Electric Power,Utilities,AEP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AES,AES Corporation,Utilities,AES,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AFL,Aflac,Financials,AFL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AIG,American International Group,Financials,AIG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AIZ,Assurant,Financials,AIZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AJG,Arthur J. Gallagher & Co.,Financials,AJG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AKAM,Akamai Technologies,Information Technology,AKAM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ALB,Albemarle Corporation,Materials,ALB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ALGN,Align Technology,Health Care,ALGN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ALL,Allstate,Financials,ALL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ALLE,Allegion,Industrials,ALLE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMAT,Applied Materials,Information Technology,AMAT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMCR,Amcor,Materials,AMCR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMD,Advanced Micro Devices,Information Technology,AMD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AME,Ametek,Industrials,AME,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMGN,Amgen,Health Care,AMGN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMP,Ameriprise Financial,Financials,AMP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMT,American Tower,Real Estate,AMT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AMZN,Amazon,Consumer Discretionary,AMZN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ANET,Arista Networks,Information Technology,ANET,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AON,Aon plc,Financials,AON,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AOS,A. O. Smith,Industrials,AOS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+APA,APA Corporation,Energy,APA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+APD,Air Products,Materials,APD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+APH,Amphenol,Information Technology,APH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+APO,Apollo Global Management,Financials,APO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+APP,AppLovin,Communication Services,APP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+APTV,Aptiv,Consumer Discretionary,APTV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ARE,Alexandria Real Estate Equities,Real Estate,ARE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ARES,Ares Management,Financials,ARES,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ATO,Atmos Energy,Utilities,ATO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AVGO,Broadcom,Information Technology,AVGO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AVY,Avery Dennison,Materials,AVY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AWK,American Water Works,Utilities,AWK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AXON,Axon Enterprise,Industrials,AXON,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AXP,American Express,Financials,AXP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+AZO,AutoZone,Consumer Discretionary,AZO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BA,Boeing,Industrials,BA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BAC,Bank of America,Financials,BAC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BALL,Ball Corporation,Materials,BALL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BAX,Baxter International,Health Care,BAX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BBY,Best Buy,Consumer Discretionary,BBY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BDX,Becton Dickinson,Health Care,BDX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BE,Bloom Energy,Industrials,BE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BEN,Franklin Resources,Financials,BEN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BF.B,Brown–Forman,Consumer Staples,BF-B,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BG,Bunge Global,Consumer Staples,BG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BIIB,Biogen,Health Care,BIIB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BKNG,Booking Holdings,Consumer Discretionary,BKNG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BKR,Baker Hughes,Energy,BKR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BLK,BlackRock,Financials,BLK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BMY,Bristol Myers Squibb,Health Care,BMY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BNY,BNY Mellon,Financials,BNY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BR,Broadridge Financial Solutions,Industrials,BR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BRK.B,Berkshire Hathaway,Financials,BRK-B,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BRO,Brown & Brown,Financials,BRO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BSX,Boston Scientific,Health Care,BSX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BX,Blackstone Inc.,Financials,BX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+BXP,"BXP, Inc.",Real Estate,BXP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+C,Citigroup,Financials,C,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CAH,Cardinal Health,Health Care,CAH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CARR,Carrier Global,Industrials,CARR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CASY,Casey's,Consumer Staples,CASY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CAT,Caterpillar Inc.,Industrials,CAT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CB,Chubb Limited,Financials,CB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CBOE,Cboe Global Markets,Financials,CBOE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CBRE,CBRE Group,Real Estate,CBRE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CCI,Crown Castle,Real Estate,CCI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CCL,Carnival Corporation,Consumer Discretionary,CCL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CDNS,Cadence Design Systems,Information Technology,CDNS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CDW,CDW Corporation,Information Technology,CDW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CEG,Constellation Energy,Utilities,CEG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CF,CF Industries,Materials,CF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CFG,Citizens Financial Group,Financials,CFG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CHD,Church & Dwight,Consumer Staples,CHD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CHRW,C.H. Robinson,Industrials,CHRW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CHTR,Charter Communications,Communication Services,CHTR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CI,Cigna,Health Care,CI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CIEN,Ciena,Information Technology,CIEN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CINF,Cincinnati Financial,Financials,CINF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CL,Colgate-Palmolive,Consumer Staples,CL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CLX,Clorox,Consumer Staples,CLX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CMCSA,Comcast,Communication Services,CMCSA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CME,CME Group,Financials,CME,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CMG,Chipotle Mexican Grill,Consumer Discretionary,CMG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CMI,Cummins,Industrials,CMI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CMS,CMS Energy,Utilities,CMS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CNC,Centene Corporation,Health Care,CNC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CNP,CenterPoint Energy,Utilities,CNP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COF,Capital One,Financials,COF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COHR,Coherent Corp.,Information Technology,COHR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COIN,Coinbase,Financials,COIN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COO,Cooper Companies (The),Health Care,COO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COP,ConocoPhillips,Energy,COP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COR,Cencora,Health Care,COR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+COST,Costco,Consumer Staples,COST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CPAY,Corpay,Financials,CPAY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CPRT,Copart,Industrials,CPRT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CPT,Camden Property Trust,Real Estate,CPT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CRH,CRH plc,Materials,CRH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CRL,Charles River Laboratories,Health Care,CRL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CRM,Salesforce,Information Technology,CRM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CRWD,CrowdStrike,Information Technology,CRWD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CSCO,Cisco,Information Technology,CSCO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CSGP,CoStar Group,Real Estate,CSGP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CSX,CSX Corporation,Industrials,CSX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CTAS,Cintas,Industrials,CTAS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CTSH,Cognizant,Information Technology,CTSH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CTVA,Corteva,Materials,CTVA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CVNA,Carvana,Consumer Discretionary,CVNA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CVS,CVS Health,Health Care,CVS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+CVX,Chevron Corporation,Energy,CVX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+D,Dominion Energy,Utilities,D,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DAL,Delta Air Lines,Industrials,DAL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DASH,DoorDash,Consumer Discretionary,DASH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DD,DuPont,Industrials,DD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DDOG,Datadog,Information Technology,DDOG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DE,Deere & Company,Industrials,DE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DECK,Deckers Brands,Consumer Discretionary,DECK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DELL,Dell Technologies,Information Technology,DELL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DG,Dollar General,Consumer Staples,DG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DGX,Quest Diagnostics,Health Care,DGX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DHI,D. R. Horton,Consumer Discretionary,DHI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DHR,Danaher Corporation,Health Care,DHR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DIS,Walt Disney Company (The),Communication Services,DIS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DLR,Digital Realty,Real Estate,DLR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DLTR,Dollar Tree,Consumer Staples,DLTR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DOC,Healthpeak Properties,Real Estate,DOC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DOV,Dover Corporation,Industrials,DOV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DOW,Dow Inc.,Materials,DOW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DPZ,Domino's,Consumer Discretionary,DPZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DRI,Darden Restaurants,Consumer Discretionary,DRI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DTE,DTE Energy,Utilities,DTE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DUK,Duke Energy,Utilities,DUK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DVA,DaVita,Health Care,DVA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DVN,Devon Energy,Energy,DVN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+DXCM,Dexcom,Health Care,DXCM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EBAY,eBay Inc.,Consumer Discretionary,EBAY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ECHO,EchoStar,Communication Services,ECHO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ECL,Ecolab,Materials,ECL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ED,Consolidated Edison,Utilities,ED,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EFX,Equifax,Industrials,EFX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EG,Everest Group,Financials,EG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EIX,Edison International,Utilities,EIX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EL,Estée Lauder Companies (The),Consumer Staples,EL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ELV,Elevance Health,Health Care,ELV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EME,Emcor,Industrials,EME,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EMR,Emerson Electric,Industrials,EMR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EOG,EOG Resources,Energy,EOG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EQIX,Equinix,Real Estate,EQIX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EQT,EQT Corporation,Energy,EQT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ERIE,Erie Indemnity,Financials,ERIE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ES,Eversource Energy,Utilities,ES,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ESS,Essex Property Trust,Real Estate,ESS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ETN,Eaton Corporation,Industrials,ETN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ETR,Entergy,Utilities,ETR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EVRG,Evergy,Utilities,EVRG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EW,Edwards Lifesciences,Health Care,EW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EXC,Exelon,Utilities,EXC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EXE,Expand Energy,Energy,EXE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EXPD,Expeditors International,Industrials,EXPD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EXPE,Expedia Group,Consumer Discretionary,EXPE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+EXR,Extra Space Storage,Real Estate,EXR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+F,Ford Motor Company,Consumer Discretionary,F,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FANG,Diamondback Energy,Energy,FANG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FAST,Fastenal,Industrials,FAST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FCX,Freeport-McMoRan,Materials,FCX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FDS,FactSet,Financials,FDS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FDX,FedEx,Industrials,FDX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FDXF,FedEx Freight,Industrials,FDXF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FE,FirstEnergy,Utilities,FE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FERG,Ferguson Enterprises,Industrials,FERG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FFIV,"F5, Inc.",Information Technology,FFIV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FICO,Fair Isaac,Information Technology,FICO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FIS,Fidelity National Information Services,Financials,FIS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FISV,Fiserv,Financials,FISV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FITB,Fifth Third Bancorp,Financials,FITB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FIX,Comfort Systems USA,Industrials,FIX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FLEX,Flex Ltd.,Information Technology,FLEX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FOX,Fox Corporation (Class B),Communication Services,FOX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FOXA,Fox Corporation (Class A),Communication Services,FOXA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FRT,Federal Realty Investment Trust,Real Estate,FRT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FSLR,First Solar,Information Technology,FSLR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FTNT,Fortinet,Information Technology,FTNT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+FTV,Fortive,Industrials,FTV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GD,General Dynamics,Industrials,GD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GDDY,GoDaddy,Information Technology,GDDY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GE,GE Aerospace,Industrials,GE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GEHC,GE HealthCare,Health Care,GEHC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GEN,Gen Digital,Information Technology,GEN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GEV,GE Vernova,Industrials,GEV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GILD,Gilead Sciences,Health Care,GILD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GIS,General Mills,Consumer Staples,GIS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GL,Globe Life,Financials,GL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GLW,Corning Inc.,Information Technology,GLW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GM,General Motors,Consumer Discretionary,GM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GNRC,Generac,Industrials,GNRC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GOOG,Alphabet Inc. (Class C),Communication Services,GOOG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GOOGL,Alphabet Inc. (Class A),Communication Services,GOOGL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GPC,Genuine Parts Company,Consumer Discretionary,GPC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GPN,Global Payments,Financials,GPN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GRMN,Garmin,Consumer Discretionary,GRMN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GS,Goldman Sachs,Financials,GS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+GWW,W. W. Grainger,Industrials,GWW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HAL,Halliburton,Energy,HAL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HAS,Hasbro,Consumer Discretionary,HAS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HBAN,Huntington Bancshares,Financials,HBAN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HCA,HCA Healthcare,Health Care,HCA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HD,Home Depot (The),Consumer Discretionary,HD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HIG,Hartford (The),Financials,HIG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HII,Huntington Ingalls Industries,Industrials,HII,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HLT,Hilton Worldwide,Consumer Discretionary,HLT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HON,Honeywell Technologies,Industrials,HON,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HONA,Honeywell Aerospace,Industrials,HONA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HOOD,Robinhood Markets,Financials,HOOD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HPE,Hewlett Packard Enterprise,Information Technology,HPE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HPQ,HP Inc.,Information Technology,HPQ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HRL,Hormel Foods,Consumer Staples,HRL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HSIC,Henry Schein,Health Care,HSIC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HST,Host Hotels & Resorts,Real Estate,HST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HSY,Hershey Company (The),Consumer Staples,HSY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HUBB,Hubbell Incorporated,Industrials,HUBB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HUM,Humana,Health Care,HUM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+HWM,Howmet Aerospace,Industrials,HWM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IBKR,Interactive Brokers,Financials,IBKR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IBM,IBM,Information Technology,IBM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ICE,Intercontinental Exchange,Financials,ICE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IDXX,Idexx Laboratories,Health Care,IDXX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IEX,IDEX Corporation,Industrials,IEX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IFF,International Flavors & Fragrances,Materials,IFF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ILMN,"Illumina, Inc.",Health Care,ILMN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+INCY,Incyte,Health Care,INCY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+INTC,Intel,Information Technology,INTC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+INTU,Intuit,Information Technology,INTU,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+INVH,Invitation Homes,Real Estate,INVH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IP,International Paper,Materials,IP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IQV,IQVIA,Health Care,IQV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IR,Ingersoll Rand,Industrials,IR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IRM,Iron Mountain,Real Estate,IRM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ISRG,Intuitive Surgical,Health Care,ISRG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IT,Gartner,Information Technology,IT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ITW,Illinois Tool Works,Industrials,ITW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+IVZ,Invesco,Financials,IVZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+J,Jacobs Solutions,Industrials,J,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+JBHT,J.B. Hunt,Industrials,JBHT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+JBL,Jabil,Information Technology,JBL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+JCI,Johnson Controls,Industrials,JCI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+JKHY,Jack Henry & Associates,Financials,JKHY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+JNJ,Johnson & Johnson,Health Care,JNJ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+JPM,JPMorgan Chase,Financials,JPM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KDP,Keurig Dr Pepper,Consumer Staples,KDP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KEY,KeyCorp,Financials,KEY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KEYS,Keysight Technologies,Information Technology,KEYS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KHC,Kraft Heinz,Consumer Staples,KHC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KIM,Kimco Realty,Real Estate,KIM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KKR,KKR & Co.,Financials,KKR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KLAC,KLA Corporation,Information Technology,KLAC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KMB,Kimberly-Clark,Consumer Staples,KMB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KMI,Kinder Morgan,Energy,KMI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KO,Coca-Cola Company (The),Consumer Staples,KO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KR,Kroger,Consumer Staples,KR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+KVUE,Kenvue,Consumer Staples,KVUE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+L,Loews Corporation,Financials,L,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LDOS,Leidos,Industrials,LDOS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LEN,Lennar,Consumer Discretionary,LEN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LH,Labcorp,Health Care,LH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LHX,L3Harris,Industrials,LHX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LII,Lennox International,Industrials,LII,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LIN,Linde plc,Materials,LIN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LITE,Lumentum,Information Technology,LITE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LLY,Lilly (Eli),Health Care,LLY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LMT,Lockheed Martin,Industrials,LMT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LNT,Alliant Energy,Utilities,LNT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LOW,Lowe's,Consumer Discretionary,LOW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LRCX,Lam Research,Information Technology,LRCX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LULU,Lululemon Athletica,Consumer Discretionary,LULU,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LUV,Southwest Airlines,Industrials,LUV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LVS,Las Vegas Sands,Consumer Discretionary,LVS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LYB,LyondellBasell,Materials,LYB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+LYV,Live Nation Entertainment,Communication Services,LYV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MA,Mastercard,Financials,MA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MAA,Mid-America Apartment Communities,Real Estate,MAA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MAR,Marriott International,Consumer Discretionary,MAR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MAS,Masco,Industrials,MAS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MCD,McDonald's,Consumer Discretionary,MCD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MCHP,Microchip Technology,Information Technology,MCHP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MCK,McKesson Corporation,Health Care,MCK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MCO,Moody's Corporation,Financials,MCO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MDLZ,Mondelez International,Consumer Staples,MDLZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MDT,Medtronic,Health Care,MDT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MET,MetLife,Financials,MET,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+META,Meta Platforms,Communication Services,META,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MGM,MGM Resorts,Consumer Discretionary,MGM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MKC,McCormick & Company,Consumer Staples,MKC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MLM,Martin Marietta Materials,Materials,MLM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MMM,3M,Industrials,MMM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MNST,Monster Beverage,Consumer Staples,MNST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MO,Altria,Consumer Staples,MO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MOS,Mosaic Company (The),Materials,MOS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MPC,Marathon Petroleum,Energy,MPC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MPWR,Monolithic Power Systems,Information Technology,MPWR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MRK,Merck & Co.,Health Care,MRK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MRNA,Moderna,Health Care,MRNA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MRSH,Marsh McLennan,Financials,MRSH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MRVL,Marvell Technology,Information Technology,MRVL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MS,Morgan Stanley,Financials,MS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MSCI,MSCI,Financials,MSCI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MSFT,Microsoft,Information Technology,MSFT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MSI,Motorola Solutions,Information Technology,MSI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MTB,M&T Bank,Financials,MTB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MTD,Mettler Toledo,Health Care,MTD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+MU,Micron Technology,Information Technology,MU,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NCLH,Norwegian Cruise Line Holdings,Consumer Discretionary,NCLH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NDAQ,"Nasdaq, Inc.",Financials,NDAQ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NDSN,Nordson Corporation,Industrials,NDSN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NEE,NextEra Energy,Utilities,NEE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NEM,Newmont,Materials,NEM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NFLX,Netflix,Communication Services,NFLX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NI,NiSource,Utilities,NI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NKE,"Nike, Inc.",Consumer Discretionary,NKE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NOC,Northrop Grumman,Industrials,NOC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NOW,ServiceNow,Information Technology,NOW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NRG,NRG Energy,Utilities,NRG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NSC,Norfolk Southern,Industrials,NSC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NTAP,NetApp,Information Technology,NTAP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NTRS,Northern Trust,Financials,NTRS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NUE,Nucor,Materials,NUE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NVDA,Nvidia,Information Technology,NVDA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NVR,"NVR, Inc.",Consumer Discretionary,NVR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NWS,News Corp (Class B),Communication Services,NWS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NWSA,News Corp (Class A),Communication Services,NWSA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+NXPI,NXP Semiconductors,Information Technology,NXPI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+O,Realty Income,Real Estate,O,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ODFL,Old Dominion,Industrials,ODFL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+OKE,Oneok,Energy,OKE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+OMC,Omnicom Group,Communication Services,OMC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ON,ON Semiconductor,Information Technology,ON,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ORCL,Oracle Corporation,Information Technology,ORCL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ORLY,O'Reilly Automotive,Consumer Discretionary,ORLY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+OTIS,Otis Worldwide,Industrials,OTIS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+OXY,Occidental Petroleum,Energy,OXY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+P,Everpure,Information Technology,P,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PANW,Palo Alto Networks,Information Technology,PANW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PAYX,Paychex,Industrials,PAYX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PCAR,Paccar,Industrials,PCAR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PCG,PG&E Corporation,Utilities,PCG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PEG,Public Service Enterprise Group,Utilities,PEG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PEP,PepsiCo,Consumer Staples,PEP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PFE,Pfizer,Health Care,PFE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PFG,Principal Financial Group,Financials,PFG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PG,Procter & Gamble,Consumer Staples,PG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PGR,Progressive Corporation,Financials,PGR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PH,Parker Hannifin,Industrials,PH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PHM,PulteGroup,Consumer Discretionary,PHM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PKG,Packaging Corporation of America,Materials,PKG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PLD,Prologis,Real Estate,PLD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PLTR,Palantir Technologies,Information Technology,PLTR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PM,Philip Morris International,Consumer Staples,PM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PNC,PNC Financial Services,Financials,PNC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PNR,Pentair,Industrials,PNR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PNW,Pinnacle West Capital,Utilities,PNW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PODD,Insulet Corporation,Health Care,PODD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PPG,PPG Industries,Materials,PPG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PPL,PPL Corporation,Utilities,PPL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PRU,Prudential Financial,Financials,PRU,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PSA,Public Storage,Real Estate,PSA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PSKY,Paramount Skydance Corporation,Communication Services,PSKY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PSX,Phillips 66,Energy,PSX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PTC,PTC Inc.,Information Technology,PTC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PWR,Quanta Services,Industrials,PWR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+PYPL,PayPal,Financials,PYPL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+Q,Qnity Electronics,Information Technology,Q,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+QCOM,Qualcomm,Information Technology,QCOM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RCL,Royal Caribbean Group,Consumer Discretionary,RCL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RDDT,Reddit,Communication Services,RDDT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+REG,Regency Centers,Real Estate,REG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+REGN,Regeneron Pharmaceuticals,Health Care,REGN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RF,Regions Financial Corporation,Financials,RF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RJF,Raymond James Financial,Financials,RJF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RL,Ralph Lauren Corporation,Consumer Discretionary,RL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RMD,ResMed|,Health Care,RMD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ROK,Rockwell Automation,Industrials,ROK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ROL,"Rollins, Inc.",Industrials,ROL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ROP,Roper Technologies,Information Technology,ROP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ROST,Ross Stores,Consumer Discretionary,ROST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RSG,Republic Services,Industrials,RSG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RTX,RTX Corporation,Industrials,RTX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+RVTY,Revvity,Health Care,RVTY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SBAC,SBA Communications,Real Estate,SBAC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SBUX,Starbucks,Consumer Discretionary,SBUX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SCHW,Charles Schwab Corporation,Financials,SCHW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SHW,Sherwin-Williams,Materials,SHW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SJM,J.M. Smucker Company (The),Consumer Staples,SJM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SLB,Schlumberger,Energy,SLB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SMCI,Supermicro,Information Technology,SMCI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SNA,Snap-on,Industrials,SNA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SNDK,Sandisk,Information Technology,SNDK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SNPS,Synopsys,Information Technology,SNPS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SO,Southern Company,Utilities,SO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SOLV,Solventum,Health Care,SOLV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SPG,Simon Property Group,Real Estate,SPG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SPGI,S&P Global,Financials,SPGI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SRE,Sempra,Utilities,SRE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+STE,Steris,Health Care,STE,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+STLD,Steel Dynamics,Materials,STLD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+STT,State Street Corporation,Financials,STT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+STX,Seagate Technology,Information Technology,STX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+STZ,Constellation Brands,Consumer Staples,STZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SW,Smurfit Westrock,Materials,SW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SWK,Stanley Black & Decker,Industrials,SWK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SWKS,Skyworks Solutions,Information Technology,SWKS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SYF,Synchrony Financial,Financials,SYF,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SYK,Stryker Corporation,Health Care,SYK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+SYY,Sysco,Consumer Staples,SYY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+T,AT&T,Communication Services,T,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TDG,TransDigm Group,Industrials,TDG,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TDY,Teledyne Technologies,Information Technology,TDY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TECH,Bio-Techne,Health Care,TECH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TEL,TE Connectivity,Information Technology,TEL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TER,Teradyne,Information Technology,TER,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TFC,Truist Financial,Financials,TFC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TGT,Target Corporation,Consumer Staples,TGT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TJX,TJX Companies,Consumer Discretionary,TJX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TKO,TKO Group Holdings,Communication Services,TKO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TMO,Thermo Fisher Scientific,Health Care,TMO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TMUS,T-Mobile US,Communication Services,TMUS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TPL,Texas Pacific Land Corporation,Energy,TPL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TPR,"Tapestry, Inc.",Consumer Discretionary,TPR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TRGP,Targa Resources,Energy,TRGP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TRMB,Trimble Inc.,Information Technology,TRMB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TROW,T. Rowe Price,Financials,TROW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TRV,Travelers Companies (The),Financials,TRV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TSCO,Tractor Supply,Consumer Discretionary,TSCO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TSLA,"Tesla, Inc.",Consumer Discretionary,TSLA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TSN,Tyson Foods,Consumer Staples,TSN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TT,Trane Technologies,Industrials,TT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TTWO,Take-Two Interactive,Communication Services,TTWO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TXN,Texas Instruments,Information Technology,TXN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TXT,Textron,Industrials,TXT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+TYL,Tyler Technologies,Information Technology,TYL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UAL,United Airlines Holdings,Industrials,UAL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UBER,Uber,Industrials,UBER,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UDR,"UDR, Inc.",Real Estate,UDR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UHS,Universal Health Services,Health Care,UHS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ULTA,Ulta Beauty,Consumer Discretionary,ULTA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UNH,UnitedHealth Group,Health Care,UNH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UNP,Union Pacific Corporation,Industrials,UNP,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+UPS,United Parcel Service,Industrials,UPS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+URI,United Rentals,Industrials,URI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+USB,U.S. Bancorp,Financials,USB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+V,Visa Inc.,Financials,V,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VEEV,Veeva Systems,Health Care,VEEV,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VICI,Vici Properties,Real Estate,VICI,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VLO,Valero Energy,Energy,VLO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VLTO,Veralto,Industrials,VLTO,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VMC,Vulcan Materials Company,Materials,VMC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VMRK,Vivmark Residential,Real Estate,VMRK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VRSK,Verisk Analytics,Industrials,VRSK,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VRSN,Verisign,Information Technology,VRSN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VRT,Vertiv,Industrials,VRT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VRTX,Vertex Pharmaceuticals,Health Care,VRTX,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VST,Vistra Corp.,Utilities,VST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VTR,Ventas,Real Estate,VTR,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VTRS,Viatris,Health Care,VTRS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+VZ,Verizon,Communication Services,VZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WAB,Wabtec,Industrials,WAB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WAT,Waters Corporation,Health Care,WAT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WBD,Warner Bros. Discovery,Communication Services,WBD,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WDAY,"Workday, Inc.",Information Technology,WDAY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WDC,Western Digital,Information Technology,WDC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WEC,WEC Energy Group,Utilities,WEC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WELL,Welltower,Real Estate,WELL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WFC,Wells Fargo,Financials,WFC,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WM,Waste Management,Industrials,WM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WMB,Williams Companies,Energy,WMB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WMT,Walmart,Consumer Staples,WMT,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WRB,W. R. Berkley Corporation,Financials,WRB,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WSM,"Williams-Sonoma, Inc.",Consumer Discretionary,WSM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WST,West Pharmaceutical Services,Health Care,WST,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WTW,Willis Towers Watson,Financials,WTW,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WY,Weyerhaeuser,Real Estate,WY,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+WYNN,Wynn Resorts,Consumer Discretionary,WYNN,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+XEL,Xcel Energy,Utilities,XEL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+XOM,ExxonMobil,Energy,XOM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+XYL,Xylem Inc.,Industrials,XYL,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+XYZ,"Block, Inc.",Financials,XYZ,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+YUM,Yum! Brands,Consumer Discretionary,YUM,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ZBH,Zimmer Biomet,Health Care,ZBH,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ZBRA,Zebra Technologies,Information Technology,ZBRA,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
+ZTS,Zoetis,Health Care,ZTS,https://en.wikipedia.org/wiki/List_of_S%26P_500_companies,2026-09-25T18:01:35.742155+00:00
