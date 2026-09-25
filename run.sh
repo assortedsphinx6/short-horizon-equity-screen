@@ -23,10 +23,10 @@ require_environment() {
 open_dashboard() {
   require_environment
   local port="${DASHBOARD_PORT:-8765}"
-  "$PYTHON" -m webbrowser "http://127.0.0.1:${port}/" >/dev/null 2>&1 &
-  echo "Dashboard: http://127.0.0.1:${port}/"
+  "$PYTHON" -m webbrowser "http://127.0.0.1:${port}/dashboard.html" >/dev/null 2>&1 &
+  echo "Dashboard: http://127.0.0.1:${port}/dashboard.html"
   echo "Press Ctrl-C to stop."
-  exec "$PYTHON" -m http.server "$port" --directory "$ROOT/dashboard/dist"
+  exec "$PYTHON" -m http.server "$port" --directory "$ROOT/outputs"
 }
 
 cd "$ROOT"

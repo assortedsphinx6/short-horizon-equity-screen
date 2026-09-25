@@ -15,6 +15,8 @@ def parse_args():
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument("--replay", action="store_true", help="Use the frozen local data vintage")
     parser.add_argument("--enrich-only", action="store_true", help="Refresh context without changing signals")
+    parser.add_argument("--render-only", action="store_true",
+                        help="Rebuild the PM note and dashboard from saved outputs")
     return parser.parse_args()
 
 

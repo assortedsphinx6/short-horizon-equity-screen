@@ -187,7 +187,9 @@ def enrich_shortlist(screen, members, meta, out, *, offline=False, now=None, cac
     if len(screen) > 10 or (not screen.empty and not screen.pm_visible.eq(True).all()):
         raise ValueError("Context input must be the final PM-visible shortlist (at most 10 names)")
     decision = pd.Timestamp(meta["decision_date"])
-    eligible = current_scope(decision, meta, now)
+    # An offline replay judges scope at the saved observation time, not today's wall clock.
+    scope_time = pd.Timestamp(meta["data_observed_at_utc"]) if offline else now
+    eligible = current_scope(decision, meta, scope_time)
     cutoff = context_cutoff(decision, meta["data_observed_at_utc"])
     folder = cache_root / cutoff.strftime("%Y%m%dT%H%M%SZ")
     client = ContextClient(folder, offline=offline)

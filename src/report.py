@@ -1,5 +1,12 @@
 """Human-readable reports generated from real saved tables."""
+import json
+
 import pandas as pd
+
+from config import LEAN_MIDPOINT
+
+# Display wording only: a lean score this close to 50 is described as near neutral.
+NEAR_NEUTRAL_POINTS = 1.0
 
 PORTFOLIO_NOTE = """# Portfolio alert: proposed operational defaults
 
@@ -43,20 +50,96 @@ def write_screen(out, screen, candidates, date, label, meta):
         "Returns and percentiles are fractions; scores are 0–100, RVOL/compression are ratios. "
         "CSV retains full precision. Lean is a heuristic, not a probability.\n\n" +
         markdown_table(screen[[c for c in cols if c in screen]]) + "\n")
-    lines = [f"1. {date.date()} Thursday close: {len(candidates)} qualify, {len(screen)} shown; {label}.",
-             "2. Five-session SPY outperformance and above-baseline volume define the impulse.",
-             "3. The next three sessions must compress versus the prior 20-session range baseline."]
-    for i in range(3):
-        if i < len(screen):
-            r = screen.iloc[i]
-            lines.append(f"{i+4}. {r.ticker}: {r.lean} lean ({r.lean_score:.1f}); retention {r.retention:.0%}, range location {r.close_location:.0%}, pause RS rank {r.consolidation_rs_percentile:.0%}.")
-        else:
-            lines.append(f"{i+4}. No additional qualifying, scorable name.")
-    lines += ["7. Daily OHLCV cannot reveal live news or order flow; lean is not a probability.",
-              "8. Next: freeze future Thursday snapshots and test unchanged rules on held-out Fridays."]
+    (out / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
+
+
+def load_saved_outputs(out):
+    """Everything PM-facing is read back from the saved core outputs, never recomputed."""
+    meta = json.loads((out / "run_metadata.json").read_text())
+    read = lambda name: pd.read_csv(out / name, float_precision="round_trip")
+    audit = read("thursday_audit.csv")
+    exclusions = read("feature_exclusions.csv")
+    context_path = out / "current_screen_context.csv"
+    return dict(
+        meta=meta, screen=read("current_thursday_screen.csv"),
+        candidates=read("current_thursday_candidates_audit.csv"),
+        members=read("universe_snapshot.csv").set_index("ticker"),
+        summary=read("outcome_summary.csv").set_index("population"),
+        sanity=read("lean_sanity.csv").set_index(["population", "group"]),
+        audit=audit, decision_audit=audit[audit.decision_date.eq(meta["decision_date"])].iloc[0],
+        exclusions=exclusions[exclusions.decision_date.eq(meta["decision_date"])],
+        context=read(context_path.name).set_index("ticker") if context_path.exists() else None)
+
+
+def near_neutral(row):
+    return pd.notna(row.lean_score) and 0 < abs(row.lean_score - LEAN_MIDPOINT) < NEAR_NEUTRAL_POINTS
+
+
+def lean_phrase(row):
+    """Wording only: the stored >50 / <50 / =50 lean label is never changed."""
+    if pd.isna(row.lean_score):
+        return "no lean (unscorable)"
+    if near_neutral(row):
+        return f"very weak {row.lean} lean (near neutral)"
+    return f"{row.lean} lean"
+
+
+def pct(x, signed=False):
+    return "n/a" if pd.isna(x) else f"{x:+.2%}" if signed else f"{x:.1%}"
+
+
+def completed_fridays(audit):
+    return int((audit.scanned.astype(bool) & audit.friday_status.eq("completed")).sum())
+
+
+def write_pm_note(out):
+    """Eight lines for the PM, derived only from saved outputs."""
+    v = load_saved_outputs(out)
+    meta, screen = v["meta"], v["screen"]
+    names = lambda frame: ", ".join(f"{r.ticker} {r.lean_score:.1f}" for r in frame.itertuples()) or "none"
+    cont = screen[screen.lean.eq("continuation")].sort_values("lean_score", ascending=False)
+    stall = screen[screen.lean.eq("stall")].sort_values("lean_score")
+    balanced = screen[screen.lean.eq("balanced")]
+    weak = screen[screen.apply(near_neutral, axis=1)] if len(screen) else screen
+    weak_text = (f"; {' and '.join(weak.ticker)} {'is' if len(weak) == 1 else 'are'} within "
+                 f"{NEAR_NEUTRAL_POINTS:g} point of 50, so read as near neutral, not a call") if len(weak) else ""
+    balanced_text = f"; balanced (exactly 50): {names(balanced)}" if len(balanced) else ""
+    if len(cont) and len(stall):
+        c, s = cont.iloc[0], stall.iloc[0]
+        why = (f"e.g. {c.ticker} kept {c.retention:.0%} of its move and closed at {c.close_location:.0%} of its range; "
+               f"{s.ticker} kept {s.retention:.0%} and closed at {s.close_location:.0%}.")
+    else:
+        why = "see the one-line reason for each name in the screen."
+    sectors = v["members"].reindex(screen.ticker).sector.value_counts()
+    if len(sectors):
+        concentrated = sectors.iloc[0] > len(screen) / 2
+        sector_text = (f"Sector mix: {sectors.iloc[0]} of {len(screen)} are {sectors.index[0]}"
+                       + (", so the list is largely one sector bet, not independent ideas." if concentrated else "."))
+    else:
+        sector_text = "Sector mix: no names displayed."
+    hi, lo = v["sanity"].loc[("pm_top10", "higher_lean_gt50")], v["sanity"].loc[("pm_top10", "lower_lean_lt50")]
+    lines = [
+        f"Thu {meta['decision_date']} close ({meta['snapshot_label']}): {len(v['candidates'])} of "
+        f"{int(v['decision_audit'].eligible_universe_count)} S&P 500 stocks beat SPY over five sessions on "
+        f"above-baseline volume, then traded a tighter-than-normal three-session range; the {len(screen)} "
+        "with the most unusual move plus volume are below.",
+        f"Continuation leans, strongest first (lean score, 50 = balanced): {names(cont)}.",
+        f"Stall leans, strongest first: {names(stall)}{weak_text}{balanced_text}.",
+        "Why: the lean averages how much of the impulse was kept, where Thursday closed in its three-day range, "
+        f"and pause strength vs SPY; {why}",
+        sector_text,
+        f"History ({completed_fridays(v['audit'])} completed Fridays, {int(v['summary'].loc['pm_top10', 'n'])} "
+        f"displayed names): higher leans closed above the range {pct(hi.continuation_rate)} vs "
+        f"{pct(lo.continuation_rate)} for lower leans, but stalled {pct(hi.stall_rate)} vs {pct(lo.stall_rate)}, "
+        f"with mean Friday return vs SPY {pct(hi.friday_excess_mean, True)} vs {pct(lo.friday_excess_mean, True)}: "
+        "no demonstrated return edge.",
+        "It sees only daily price and volume: no news, catalysts, options or order flow, or intraday path; history "
+        "uses today's S&P 500 members; the lean is a heuristic, not a probability.",
+        "Next test: on the next ten prospectively saved Thursdays, check whether the lean still separates Friday "
+        "stalls or returns vs SPY once close location, which mechanically favours breakouts, is removed.",
+    ]
     assert len(lines) == 8 and all(lines)
     (out / "pm_note_screen.md").write_text("\n".join(lines) + "\n")
-    (out / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
 
 
 def write_history(out, audit, exclusions, joined, totals, buckets, sanity, meta):

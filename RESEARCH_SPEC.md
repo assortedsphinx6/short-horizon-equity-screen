@@ -1,6 +1,6 @@
 # Frozen research specification
 
-Authority: the original two-page Deeter Analytics assignment governs deliverables; this file records the frozen methodology. No older thresholds, fallback two-day window, liquidity filters, news scoring, optimization, or strategy backtest are used. SEC is optional context for the final current shortlist; the core below is unchanged and historical enrichment remains outside scope.
+Authority: the assignment in [task.md](task.md) governs deliverables; this file records the fixed methodology. No liquidity filters, news scoring, parameter optimization, or strategy backtest are used. The constants live in `config.py` and are applied unchanged to every Thursday; the code performs no parameter search. SEC is optional context for the final current shortlist; the core below is unchanged and historical enrichment remains outside scope.
 
 ## Question and universe
 
@@ -19,7 +19,7 @@ All offsets refer to the common ordered SPY trading-session index, ending on a c
 | Current range | `(max(H[t-2..t])-min(L[t-2..t]))/C[t-3]` | Normalize a full three-session span by its immediately preceding close. |
 | Normal range | Median of 18 analogous rolling three-session ranges ending `t-25..t-8` | 20 sessions contain exactly 18 complete three-session windows; first denominator is `C[t-28]`. |
 | Compression | Current range / normal range | Compare equal-length windows within the same stock. |
-| Qualification | Excess return **>0**, RVOL **>1**, compression **<1** | 0 is SPY parity; 1 is the stock's own normal participation/range. All are strict, unfitted boundaries. |
+| Qualification | Excess return **>0**, RVOL **>1**, compression **<1** | 0 is SPY parity; 1 is the stock's own normal participation/range. All are strict; none is searched or optimized. |
 | Excitement | `100*(excess_return_percentile+rvol_percentile)/2` | Equal weights avoid unsupported importance estimates; 100 is display scaling. |
 | Retention | `(C[t]-C[t-8])/(max(H[t-7..t-3])-C[t-8])`, clipped to `[0,1]` | 0/1 bound loss of the move and full retention; nonpositive denominator is unscorable. |
 | Close location | `(C[t]-min(L[t-2..t]))/(max(H[t-2..t])-min(L[t-2..t]))` | Position within pause range; a zero-width tie gets the neutral midpoint 0.5. |
@@ -28,7 +28,7 @@ All offsets refer to the common ordered SPY trading-session index, ending on a c
 | Lean boundary | `>50` continuation; `<50` stall; exactly `50` balanced | 50 is the midpoint, not a fitted economic cutoff. |
 | PM display | Up to 10 qualifying, scorable names, excitement descending then ticker ascending | 10 limits reading burden; never fill with nonqualifiers. |
 | Evidence horizon | Latest 12 calendar months through screen Thursday | About a year provides recent descriptive evidence within prototype scope. |
-| Lean bins | `[0,20),[20,40),[40,60),[60,80),[80,100]` | Five equal-width descriptive intervals fixed before outcomes; include 100. |
+| Lean bins | `[0,20),[20,40),[40,60),[60,80),[80,100]` | Five equal-width descriptive intervals; include 100. |
 
 Ranks use `pandas.rank(method="average", pct=True)` separately on each Thursday, over the **same valid stock population** for all three ranks, before qualification and retention exclusions. A tied group receives its mean ordinal rank divided by population size. Valid means complete finite required OHLCV and positive setup denominators. The close at `t-28` is required; this implementation conservatively validates its full OHLCV bar too. Save the entire rank population. Setup-qualified names with invalid retention remain in candidate audit and unconditional outcome statistics, but have no lean or PM display slot. A negative absolute impulse can still qualify if SPY did worse; flag and count it without adding an absolute-return filter.
 
@@ -62,7 +62,7 @@ Report scanned dates, holiday and missing dates, median valid universe, all qual
 
 ## Alternatives, limitations and next test
 
-“Excitement” could mean news or options attention; v1 observes price and volume. “Consolidation” could mean two sideways days or declining volume; v1 uses three-day range compression. “Goes again” could mean an intraday breakout or any positive close; v1 requires a closing breakout and retains other measurements separately. An absolute-gain condition is a possible future refinement, not a retrospective change.
+“Excitement” could mean news or options attention; v1 observes price and volume. RVOL > 1 is a permissive above-baseline participation gate, not an extreme-volume threshold; in broad high-volume weeks it is weakly binding, and the RVOL percentile inside the excitement score provides the stronger discrimination. “Consolidation” could mean two sideways days or declining volume; v1 uses three-day range compression. “Goes again” could mean an intraday breakout or any positive close; v1 requires a closing breakout and retains other measurements separately. An absolute-gain condition is a possible future refinement, not a retrospective change.
 
 Current constituents omit historical deletions and include additions before their membership dates. Today's adjusted history is not an archived Thursday vintage. Yahoo may be delayed, missing, revised or affected by actions. No free daily bars establish sentiment, order flow, borrow availability, executable prices, transaction costs, intraday path, portfolio positions or PM-specific catalysts. Fixed conventions are not empirically validated cutoffs; the same recent regime supplies only descriptive evidence, with no threshold search or out-of-sample claim. Obtain point-in-time constituents and archived corporate-action-consistent data, record prospective Thursday snapshots, and evaluate unchanged rules on held-out Fridays.
 

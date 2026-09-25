@@ -10,11 +10,12 @@ import sys
 import pandas as pd
 
 from config import BENCHMARK
+from src.dashboard import write_dashboard
 from src.data import download, load_cache, save_cache, schedule, universe
 from src.enrichment import enrich_shortlist
 from src.evaluate import evaluate, session_status, summary_tables
 from src.features import build_features
-from src.report import markdown_table, write_history, write_screen
+from src.report import markdown_table, write_history, write_pm_note, write_screen
 from src.screen import rank_and_screen
 
 PACKAGE_NAMES = ["pandas", "numpy", "yfinance", "requests", "lxml", "pandas_market_calendars"]
@@ -25,8 +26,12 @@ def run_research(args):
     now = pd.Timestamp.now(tz="UTC")
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    if args.render_only:
+        render_saved_outputs(output_dir)
+        return
     if args.enrich_only:
         enrich_saved_screen(output_dir, offline=args.replay, now=now)
+        render_saved_outputs(output_dir)
         return
 
     today = now.tz_convert("America/New_York").normalize().tz_localize(None)
@@ -43,6 +48,7 @@ def run_research(args):
     totals = save_historical_study(study, prices, members, calendar, observed_at, metadata, output_dir)
     print_run_summary(screen, totals, output_dir, observed_at)
     enrich_saved_screen(output_dir, offline=args.replay, now=now)
+    render_saved_outputs(output_dir)
 
 
 def validate_requested_period(args, today):
@@ -152,8 +158,6 @@ def save_historical_study(study, prices, members, calendar, observed_at, metadat
         "universe_snapshot.csv": members,
     }.items():
         frame.to_csv(output_dir / filename, index=False)
-    Path("data").mkdir(exist_ok=True)
-    members.to_csv("data/universe.csv", index=False)
     history_path = output_dir / "historical_thursday_screens.csv"
     frozen_hash = hashlib.sha256(history_path.read_bytes()).hexdigest()
     outcomes = evaluate(decisions, prices, calendar, observed_at)
@@ -195,3 +199,9 @@ def enrich_saved_screen(output_dir, *, offline=False, now=None):
         message = f"Context unavailable: {type(exc).__name__}: {exc}. Yahoo core remains valid.\n"
         (output_dir / "ENRICHMENT_FAILED.txt").write_text(message)
         print(message, file=sys.stderr)
+
+
+def render_saved_outputs(output_dir):
+    """The PM note and dashboard are views of saved outputs, never a second source of numbers."""
+    write_pm_note(output_dir)
+    write_dashboard(output_dir)

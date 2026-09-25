@@ -23,8 +23,7 @@ def fixture(date="2026-09-24"):
     for i in range(26, 29):
         a.iloc[i] = [106, 107, 105, 106.5, 90, 0, 0]
     b = bars()  # nonqualifier remains in ranks
-    c = bars()
-    # Qualifying relative decline with invalid retention: SPY loses more.
+    c = bars()  # flat nonqualifier; individual tests override its features
     return {"SPY": spy, "A": a, "B": b, "C": c}, cal, t
 
 

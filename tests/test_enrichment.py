@@ -93,6 +93,17 @@ class EnrichmentTests(unittest.TestCase):
             self.assertTrue(pd.isna(context.iloc[0].sec_filing_count))
             assert_frame_equal(screen, original)
 
+    def test_offline_replay_scope_uses_saved_observation_time(self):
+        screen, members, meta = screen_inputs()
+        after_friday_close = pd.Timestamp("2026-09-28T15:00:00Z")
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            with patch("src.enrichment.cik_mapping", return_value=({"AAA": (1, "fixture")}, [])), \
+                 patch("src.enrichment.sec_context", return_value=dict(sec_status="none", sec_filing_count=0)):
+                enrich_shortlist(screen, members, meta, out, offline=True, now=after_friday_close,
+                                 cache_root=out / "cache")
+            self.assertEqual(pd.read_csv(out / "current_screen_context.csv").iloc[0].sec_status, "none")
+
     def test_historical_and_empty_screens_make_no_source_calls(self):
         screen, members, meta = screen_inputs()
         with tempfile.TemporaryDirectory() as folder:

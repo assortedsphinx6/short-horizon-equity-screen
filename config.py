@@ -1,4 +1,4 @@
-"""Frozen research conventions; not tuned against Friday outcomes."""
+"""Fixed research conventions, applied unchanged to every Thursday; no parameter search is performed."""
 IMPULSE = 5
 CONSOLIDATION = 3
 BASELINE = 20

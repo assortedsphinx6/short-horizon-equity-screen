@@ -1,8 +1,14 @@
 """Submission-level checks for commands, required artifacts, and dashboard integrity."""
-import re
+import shutil
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
+
+import pandas as pd
+
+from src.dashboard import write_dashboard
+from src.report import write_pm_note
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +21,7 @@ class SubmissionTests(unittest.TestCase):
             "outputs/current_thursday_screen.csv", "outputs/current_thursday_screen.md",
             "outputs/historical_summary.md", "outputs/historical_thursday_screens.csv",
             "outputs/pm_note_screen.md", "outputs/pm_note_portfolio_alert.md",
-            "dashboard/dist/index.html",
+            "outputs/dashboard.html", "task.md",
         ]
         missing = [name for name in required if not (ROOT / name).is_file()]
         self.assertEqual(missing, [])
@@ -29,21 +35,34 @@ class SubmissionTests(unittest.TestCase):
         self.assertIn("--replay", result.stdout)
         self.assertIn("--enrich-only", result.stdout)
 
-    def test_dashboard_has_ten_unique_signals_and_plain_language(self):
-        page = (ROOT / "dashboard/dist/index.html").read_text()
-        tickers = re.findall(r"\{t:'([A-Z]+)',lean:", page)
-        self.assertEqual(len(tickers), 10)
-        self.assertEqual(len(set(tickers)), 10)
-        self.assertIn("Why it leans this way", page)
-        self.assertIn("not a probability or trade recommendation", page)
-        self.assertIn("503 S&amp;P 500 constituent securities were loaded", page)
-        self.assertIn("APH was excluded", page)
+    def test_note_and_dashboard_are_exact_views_of_saved_outputs(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            for path in (ROOT / "outputs").glob("*"):
+                if path.suffix in {".csv", ".json"}:
+                    shutil.copy(path, out / path.name)
+            write_pm_note(out)
+            write_dashboard(out)
+            for name in ["pm_note_screen.md", "dashboard.html"]:
+                with self.subTest(name=name):
+                    self.assertEqual((out / name).read_text(), (ROOT / "outputs" / name).read_text())
+
+    def test_dashboard_lists_saved_screen_without_unsupported_claims(self):
+        page = (ROOT / "outputs/dashboard.html").read_text()
+        screen = pd.read_csv(ROOT / "outputs/current_thursday_screen.csv")
+        for r in screen.itertuples():
+            self.assertIn(f"<span class='t'>{r.ticker}</span>", page)
+            self.assertIn(f"lean score {r.lean_score:.1f}", page)
+        self.assertEqual(page.count("<span class='t'>"), len(screen))
+        self.assertIn("not a probability or a trade recommendation", page)
+        for phrase in ["more likely", "useful signal", "proven edge"]:
+            self.assertNotIn(phrase, page.lower())
 
     def test_no_platform_branding_or_developer_paths_in_submission(self):
         searchable = [
             ROOT / "README.md", ROOT / "RESEARCH_SPEC.md", ROOT / "main.py",
             *sorted((ROOT / "src").glob("*.py")),
-            ROOT / "dashboard/dist/index.html",
+            ROOT / "outputs/dashboard.html",
         ]
         forbidden = (
             "chat" + "gpt", "open" + "ai", "co" + "dex",
