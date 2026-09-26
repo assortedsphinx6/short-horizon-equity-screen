@@ -73,6 +73,17 @@ def evidence_panel(v, population, title):
         f"stalled {pct(lo.stall_rate)}, mean vs SPY {pct(lo.friday_excess_mean, True)}.</li></ul></div>")
 
 
+FRIDAY_STATUS_TEXT = {
+    "pending": "Friday {friday} had not closed at the observation time, so this list's Friday outcome is pending: "
+               "not evaluated and excluded from the completed-Friday evidence below. This preserves the point-in-time "
+               "state; it is not missing data.",
+    "completed": "Friday {friday} had closed at the observation time, so this list's Friday outcomes are included in "
+                 "the evidence below; any name without a valid Friday bar is missing_data and excluded.",
+    "holiday": "Friday {friday} is an exchange holiday: no Friday outcome is recorded, Monday is not substituted, and "
+               "this Thursday is excluded from the completed-Friday evidence below.",
+}
+
+
 def write_dashboard(out):
     v = load_saved_outputs(out)
     meta, screen, audit = v["meta"], v["screen"], v["decision_audit"]
@@ -80,6 +91,8 @@ def write_dashboard(out):
     counts = screen.lean.value_counts()
     failures = meta.get("download_failures", {})
     friday_status = str(audit.friday_status)
+    friday = (pd.Timestamp(meta["decision_date"]) + pd.Timedelta(days=1)).date()
+    friday_text = FRIDAY_STATUS_TEXT.get(friday_status, "").format(friday=friday)
     excluded = "; ".join(f"{escape(r.ticker)} ({escape(r.reason.replace('_', ' '))})"
                          for r in v["exclusions"].itertuples()) or "none"
     rows = "".join(signal_row(r, v) for r in screen.itertuples()) or "<tr><td colspan='9'>No qualifying names.</td></tr>"
@@ -104,8 +117,8 @@ it is not a probability or a trade recommendation. Scores close to 50 carry litt
 <div class="kpi"><b>{len(failures)}</b><span>unresolved Yahoo downloads</span></div>
 <div class="kpi"><b>{len(v['exclusions'])}</b><span>securities excluded on this Thursday</span></div>
 <div class="kpi"><b>{escape(friday_status)}</b><span>immediate Friday status</span></div>
-</div><span class="muted">Observation frozen at {observed:%Y-%m-%d %H:%M} America/New_York. A pending Friday is
-not evaluated, and unavailable input is never treated as a negative signal.</span></div>
+</div><span class="muted">Observation frozen at {observed:%Y-%m-%d %H:%M} America/New_York. {escape(friday_text)}
+Unavailable input is never treated as a negative signal.</span></div>
 <h2>Thursday list</h2>
 <div class="panel scroll"><table><thead><tr><th>Name</th><th>Lean</th><th>Excitement</th><th>Impulse vs SPY</th>
 <th>RVOL</th><th>Compression</th><th>Lean inputs</th><th>Reason</th><th>SEC context</th></tr></thead>
@@ -121,7 +134,7 @@ otherwise neutral. Descriptive only.</p>
 {evidence_panel(v, 'all_qualified', 'All qualifiers')}</div>
 <div class="panel" style="margin-top:16px"><b>How to read this evidence</b><ul>
 <li>Higher- and lower-lean outcome rates are shown above; lean is a descriptive heuristic, not a calibrated probability, and no return edge is claimed.</li>
-<li>A close near the top of Thursday's range leaves less distance to a breakout, so part of that gap is mechanical.</li>
+<li>A close near the top of Thursday's range leaves less distance to a breakout, so any breakout difference between higher and lower leans is partly mechanical.</li>
 <li>Names on the same Friday are correlated, so observations are not independent; no trading costs or P&amp;L are modelled.</li></ul></div>
 <h2>Limits</h2>
 <div class="panel"><ul>

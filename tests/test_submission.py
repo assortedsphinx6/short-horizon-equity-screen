@@ -73,6 +73,21 @@ class SubmissionTests(unittest.TestCase):
         for phrase in ["more likely", "useful signal", "proven edge"]:
             self.assertNotIn(phrase, page.lower())
 
+    def test_dashboard_explains_the_actual_friday_status(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            for path in (ROOT / "outputs").glob("*"):
+                if path.suffix in {".csv", ".json"}:
+                    shutil.copy(path, out / path.name)
+            audit = pd.read_csv(out / "thursday_audit.csv")
+            for status, phrase in [("pending", "outcome is pending"), ("completed", "are included in the evidence"),
+                                   ("holiday", "Monday is not substituted")]:
+                audit.loc[audit.decision_date.eq("2026-09-24"), "friday_status"] = status
+                audit.to_csv(out / "thursday_audit.csv", index=False)
+                write_dashboard(out)
+                with self.subTest(status=status):
+                    self.assertIn(phrase, (out / "dashboard.html").read_text())
+
     def test_no_platform_branding_or_developer_paths_in_submission(self):
         searchable = [
             ROOT / "README.md", ROOT / "RESEARCH_SPEC.md", ROOT / "main.py",
