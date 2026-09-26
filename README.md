@@ -53,7 +53,7 @@ Python 3.11+. No credentials.
 ./run.sh test        # run the test suite
 ./run.sh replay      # rebuild the submitted 24 September screen offline from the frozen fixture
 ./run.sh fresh       # download current data; screen the latest completed Thursday; rebuild all outputs
-./run.sh dashboard   # serve outputs/dashboard.html locally
+./run.sh dashboard   # optional: serve outputs/dashboard.html locally
 ```
 
 - `./run.sh fresh` always screens the **latest completed Thursday**, refreshes the latest files in `outputs/`, and saves a dated copy in `outputs/runs/YYYY-MM-DD/`. A dated copy is never overwritten: rerunning the same Thursday later (Yahoo revises adjusted history) keeps the earlier frozen snapshot, prints a note, and records `archive_status` in `outputs/run_metadata.json`.
@@ -63,7 +63,7 @@ Python 3.11+. No credentials.
 - `./run.sh integration` runs the slower full replay contract and checks the exact 503 → 502 → 65 → 10 funnel, ticker order and decision hash.
 - Tested on Python 3.11.4; the exact environment is in `requirements-lock.txt`.
 
-The dashboard is a static view of the latest saved run, regenerated whenever the pipeline runs; it is not a live market-data terminal.
+**Dashboard:** open `outputs/dashboard.html` directly in any browser. It is one self-contained file (inline styles, data embedded, no scripts or network requests), so no server is needed; `./run.sh dashboard` is only an optional convenience that serves the same file. It is a static view of the latest saved run, regenerated whenever the pipeline runs, not a live market-data terminal.
 
 ## Weekly operating cycle
 

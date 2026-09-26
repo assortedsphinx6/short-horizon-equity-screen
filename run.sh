@@ -10,7 +10,7 @@ usage() {
   echo "  replay     Rebuild the submitted 24 September screen from the committed frozen fixture"
   echo "  test       Run the complete deterministic test suite"
   echo "  integration Run the slower frozen end-to-end contract"
-  echo "  dashboard  Open the portfolio-manager dashboard locally"
+  echo "  dashboard  Optional: serve outputs/dashboard.html locally (it also opens directly from disk)"
   echo "  setup      Create the virtual environment and install dependencies"
 }
 
