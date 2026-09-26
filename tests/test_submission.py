@@ -18,6 +18,8 @@ class SubmissionTests(unittest.TestCase):
     def test_required_assignment_artifacts_exist(self):
         required = [
             "README.md", "RESEARCH_SPEC.md", "docs/methodology-flow.md",
+            ".github/workflows/weekly-screen.yml", "validation/README.md", "validation/prospective_log.csv",
+            "fixtures/frozen_2026-09-24/manifest.json", "fixtures/frozen_2026-09-24/prices.csv.gz",
             "requirements.txt", "main.py", "run.sh",
             "outputs/current_thursday_screen.csv", "outputs/current_thursday_screen.md",
             "outputs/historical_summary.md", "outputs/historical_thursday_screens.csv",
@@ -44,6 +46,7 @@ class SubmissionTests(unittest.TestCase):
         )
         self.assertIn("--replay", result.stdout)
         self.assertIn("--enrich-only", result.stdout)
+        self.assertIn("--update-friday", result.stdout)
 
     def test_note_and_dashboard_are_exact_views_of_saved_outputs(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -65,6 +68,8 @@ class SubmissionTests(unittest.TestCase):
             self.assertIn(f"lean score {r.lean_score:.1f}", page)
         self.assertEqual(page.count("<span class='t'>"), len(screen))
         self.assertIn("not a probability or a trade recommendation", page)
+        self.assertIn("Data-quality status", page)
+        self.assertIn("latest completed market bar", page)
         for phrase in ["more likely", "useful signal", "proven edge"]:
             self.assertNotIn(phrase, page.lower())
 

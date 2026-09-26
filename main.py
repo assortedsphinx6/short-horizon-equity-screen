@@ -13,16 +13,24 @@ def parse_args():
     parser.add_argument("--as-of", help="Completed Thursday YYYY-MM-DD")
     parser.add_argument("--months", type=int, default=MONTHS)
     parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument("--cache-dir", default="cache", help="Market-data cache directory")
     parser.add_argument("--replay", action="store_true", help="Use the frozen local data vintage")
     parser.add_argument("--enrich-only", action="store_true", help="Refresh context without changing signals")
     parser.add_argument("--render-only", action="store_true",
                         help="Rebuild the PM note and dashboard from saved outputs")
+    parser.add_argument("--update-friday", metavar="THURSDAY",
+                        help="Append Friday outcomes to a saved dated Thursday run")
     return parser.parse_args()
 
 
 def record_failure(args, error):
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    if args.update_friday:
+        message = f"{type(error).__name__}: {error}\nFriday update failed; saved Thursday signals were not changed.\n"
+        (output_dir / "FRIDAY_UPDATE_FAILED.txt").write_text(message)
+        print(message, file=sys.stderr)
+        return
     message = f"{type(error).__name__}: {error}\nRun failed; existing outputs may belong to an older run.\n"
     (output_dir / "RUN_FAILED.txt").write_text(message)
     (output_dir / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)

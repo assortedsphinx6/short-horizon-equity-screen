@@ -78,11 +78,14 @@ def write_dashboard(out):
     meta, screen, audit = v["meta"], v["screen"], v["decision_audit"]
     observed = pd.Timestamp(meta["data_observed_at_utc"]).tz_convert("America/New_York")
     counts = screen.lean.value_counts()
+    failures = meta.get("download_failures", {})
+    friday_status = str(audit.friday_status)
     excluded = "; ".join(f"{escape(r.ticker)} ({escape(r.reason.replace('_', ' '))})"
                          for r in v["exclusions"].itertuples()) or "none"
     rows = "".join(signal_row(r, v) for r in screen.itertuples()) or "<tr><td colspan='9'>No qualifying names.</td></tr>"
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="refresh" content="60">
 <title>Thursday Screen Dashboard</title><style>{STYLE}</style></head><body>
 <header><b>Thursday-close screen: {escape(meta['decision_date'])}</b>
 <span>Data observed {observed:%Y-%m-%d %H:%M} America/New_York · {escape(meta['snapshot_label'])}</span></header>
@@ -96,6 +99,14 @@ it is not a probability or a trade recommendation. Scores close to 50 carry litt
 <div class="kpi"><b>{len(screen)}</b><span>shown (top by excitement)</span></div></div>
 <span class="muted">Excluded before ranking: {excluded}. The other qualifiers are in
 <code>current_thursday_candidates_audit.csv</code>.</span></div>
+<h2>Data-quality status</h2>
+<div class="panel"><div class="kpis">
+<div class="kpi"><b>{escape(str(meta['data_as_of']))}</b><span>latest completed market bar</span></div>
+<div class="kpi"><b>{len(failures)}</b><span>unresolved Yahoo downloads</span></div>
+<div class="kpi"><b>{len(v['exclusions'])}</b><span>securities excluded on this Thursday</span></div>
+<div class="kpi"><b>{escape(friday_status)}</b><span>immediate Friday status</span></div>
+</div><span class="muted">Observation frozen at {observed:%Y-%m-%d %H:%M} America/New_York. A pending Friday is
+not evaluated, and unavailable input is never treated as a negative signal.</span></div>
 <h2>Thursday list</h2>
 <div class="panel scroll"><table><thead><tr><th>Name</th><th>Lean</th><th>Excitement</th><th>Impulse vs SPY</th>
 <th>RVOL</th><th>Compression</th><th>Lean inputs</th><th>Reason</th><th>SEC context</th></tr></thead>

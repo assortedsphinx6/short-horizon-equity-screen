@@ -44,7 +44,7 @@ All three qualification inequalities are strict. The lean is a heuristic summary
 
 **RVOL > 1 is deliberately permissive.** It is an above-baseline participation gate, not an extreme-volume threshold. In broad high-volume weeks it filters little (on 24 September, quarterly-expiration volume on 18 September put most stocks above 1); the RVOL percentile inside the excitement score does most of the discrimination for the displayed names.
 
-## Run it
+## Five-minute reviewer quick start
 
 Python 3.11+. No credentials.
 
@@ -55,11 +55,15 @@ Python 3.11+. No credentials.
 ./run.sh test        # run the test suite
 ```
 
-- `./run.sh fresh` always screens the **latest completed Thursday** at the time you run it, so a later run produces a later list. It overwrites `outputs/` and `cache/`. The committed `outputs/` are the record of the 24 September run.
+- `./run.sh fresh` always screens the **latest completed Thursday**, refreshes the latest files in `outputs/`, and also preserves a dated copy in `outputs/runs/YYYY-MM-DD/`.
 - `.venv/bin/python main.py --as-of YYYY-MM-DD` screens a specific completed Thursday (non-Thursdays, holidays and unfinished sessions are rejected).
-- `./run.sh replay` reruns a saved run offline from the local `cache/` written by a previous `fresh` run, into `outputs/replay/`. **`cache/` is not committed** (gitignored, about 5 MB), so a fresh clone cannot replay 24 September; run `fresh` first. Yahoo revises history, so a later fresh download need not reproduce every saved value.
+- `./run.sh replay` rebuilds the submitted September screen offline into `outputs/replay/`. It prefers a local `cache/`; a fresh clone falls back to the committed frozen input vintage in `fixtures/frozen_2026-09-24/`.
+- `./run.sh update-friday YYYY-MM-DD` verifies the saved Thursday decision hash, downloads the completed Friday bars, and updates only outcomes and reports. It never recalculates Thursday features.
 - `main.py --render-only` rebuilds the PM note and dashboard from saved outputs without any download. `main.py --enrich-only` refreshes the optional SEC context without changing any signal.
+- `./run.sh integration` runs the slower full replay contract and checks the exact 503 → 502 → 65 → 10 funnel, ticker order and decision hash.
 - Tested on Python 3.11.4; the exact environment is in `requirements-lock.txt`.
+
+The dashboard is a locally served, auto-refreshing view of the latest saved run. It refreshes the page every 60 seconds and updates whenever the pipeline rewrites `outputs/dashboard.html`; it is not a streaming intraday market-data terminal.
 
 ## Weekly operating cycle
 
@@ -67,10 +71,12 @@ What the code does today:
 
 1. **Thursday after the close:** `./run.sh fresh` refreshes the current constituent snapshot, downloads enough daily history, selects the latest completed Thursday, validates each required window, recomputes cross-sectional ranks, applies the fixed rules, selects up to ten names, saves the signal tables, adds optional SEC context, and renders the note and dashboard.
 2. **Friday before the close:** the saved observation timestamp keeps Friday `pending`; a partial daily bar cannot become an outcome.
-3. **Friday after the close:** another fresh run rebuilds the study and classifies the immediate Friday as continuation, neutral or stall. A Friday holiday is skipped; Monday is never substituted.
+3. **Friday after the close:** `./run.sh update-friday YYYY-MM-DD` loads the dated Thursday artifact, verifies its hash, downloads Friday bars, and appends continuation, neutral or stall outcomes without recomputing Thursday features. A Friday holiday is skipped; Monday is never substituted.
 4. **Following week:** repeat. The target Thursday, universe, data window, eligible population, ranks, qualifiers, leans, SEC context and completed-Friday sample can change. The 5/3/20-session windows, three qualification thresholds, score formulas, top-10 limit and Friday label definitions remain fixed.
 
-This is a repeatable research script, not an unattended service. A fresh run overwrites the current files rather than appending an immutable dated weekly archive, and Friday refresh currently recomputes the Thursday features from the same downloaded history instead of loading a separately locked Thursday artifact. Commit or copy each Thursday's `outputs/` before refreshing it if prospective records are required.
+This is a repeatable research screener, not a production trading service. Dated signal artifacts and outcome-only Friday updates are automated, but source availability, failure review and any portfolio alert still require operational oversight.
+
+The repository also contains a Thursday-evening GitHub Actions workflow. It runs the fast tests, builds the screen, and retains the complete output directory as a dated workflow artifact for 90 days. It can also be started manually. Repository notification settings control failure alerts.
 
 ## Core versus optional context
 
@@ -81,6 +87,8 @@ This is a repeatable research script, not an unattended service. A fresh run ove
 ## Reading the screen
 
 `outputs/current_thursday_screen.md` (readable) and `.csv` (full precision) have one row per displayed name. `outputs/dashboard.html` shows the same rows.
+
+The dashboard also shows the latest completed bar, unresolved Yahoo downloads, securities excluded on the selected Thursday, the frozen observation timestamp, and whether the immediate Friday is pending, completed or a holiday. This distinguishes an empty signal from incomplete inputs.
 
 | Column | Meaning |
 | --- | --- |
@@ -160,8 +168,11 @@ After the Yahoo screen is complete, the ten displayed names get a separate SEC E
 | `universe_features.csv` | The full ranked population on every Thursday (proves pre-filter ranking) |
 | `thursday_audit.csv`, `feature_exclusions.csv`, `run_metadata.json`, `universe_snapshot.csv` | Per-Thursday status, exclusions, data provenance and the exact constituent list |
 | `current_screen_context.{md,csv}`, `context_metadata.json` | Optional SEC context |
+| `runs/YYYY-MM-DD/` | Dated Thursday artifact; its signal files remain frozen while Friday outcomes may be appended |
 
 Code: `main.py` (command line), `src/pipeline.py` (steps in order), `data.py`, `features.py`, `screen.py`, `evaluate.py`, `report.py`, `dashboard.py`, `enrichment.py`; constants in `config.py`. Tests in `tests/` use synthetic fixtures plus checks on the saved outputs.
+
+The prospective ten-week protocol is isolated under `validation/`. It intentionally contains only the procedure and an empty tracking log today; results must be accumulated after each list is genuinely frozen before Friday.
 
 ## Limitations
 

@@ -5,10 +5,12 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 PYTHON="$ROOT/.venv/bin/python"
 
 usage() {
-  echo "Usage: ./run.sh {fresh|replay|test|dashboard|setup}"
+  echo "Usage: ./run.sh {fresh|replay|update-friday|test|integration|dashboard|setup} [Thursday]"
   echo "  fresh      Download current data and rebuild all outputs"
   echo "  replay     Rebuild from the frozen local data cache"
+  echo "  update-friday YYYY-MM-DD  Append outcomes to a saved Thursday run"
   echo "  test       Run the complete deterministic test suite"
+  echo "  integration Run the slower frozen end-to-end contract"
   echo "  dashboard  Open the portfolio-manager dashboard locally"
   echo "  setup      Create the virtual environment and install dependencies"
 }
@@ -41,11 +43,27 @@ case "${1:-}" in
     ;;
   replay)
     require_environment
-    exec "$PYTHON" main.py --replay --output-dir outputs/replay
+    cache_dir="$ROOT/cache"
+    if [[ ! -f "$cache_dir/manifest.json" ]]; then
+      cache_dir="$ROOT/fixtures/frozen_2026-09-24"
+    fi
+    exec "$PYTHON" main.py --replay --cache-dir "$cache_dir" --output-dir outputs/replay
+    ;;
+  update-friday)
+    require_environment
+    if [[ -z "${2:-}" ]]; then
+      echo "Usage: ./run.sh update-friday YYYY-MM-DD" >&2
+      exit 2
+    fi
+    exec "$PYTHON" main.py --update-friday "$2"
     ;;
   test)
     require_environment
     exec "$PYTHON" -m unittest discover -s tests -v
+    ;;
+  integration)
+    require_environment
+    exec env RUN_INTEGRATION=1 "$PYTHON" -m unittest discover -s tests/integration -v
     ;;
   dashboard)
     open_dashboard
