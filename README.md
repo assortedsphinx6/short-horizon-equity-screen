@@ -4,6 +4,24 @@ A small, reproducible price/volume screen that turns the PM's "excitement, a few
 
 The assignment is in [task.md](task.md). Exact formulas, data handling and the outcome protocol are in [RESEARCH_SPEC.md](RESEARCH_SPEC.md).
 
+## From PM question to Friday evidence
+
+```mermaid
+flowchart LR
+    A[PM idea] --> B[Current S&P 500 securities<br/>plus SPY daily data]
+    B --> C[Validate a completed Thursday<br/>and 29-session windows]
+    C --> D[Calculate relative return,<br/>volume and compression]
+    D --> E{Pass all 3<br/>strict rules?}
+    E -- No --> F[Retain in audit only]
+    E -- Yes --> G[Rank excitement<br/>and calculate lean]
+    G --> H[Show up to 10 names<br/>with reasons]
+    H --> I[Save Thursday decisions]
+    I --> J[After Friday close:<br/>continuation / neutral / stall]
+    H -. optional .-> K[Separate SEC context]
+```
+
+The saved September run follows this funnel: **503 constituent securities loaded → 502 eligible and ranked → 65 qualified → 10 displayed**. See the [detailed calculation, timing and exclusion flow](docs/methodology-flow.md) for every window, formula, threshold and Friday branch.
+
 ## What the PM asked, and how it is operationalized
 
 > Every week there are a few names everyone is excited about with volume, but then there are a few consolidation days. From there, either it goes again Friday, or it stalls. I want a list Thursday night…
@@ -42,6 +60,23 @@ Python 3.11+. No credentials.
 - `./run.sh replay` reruns a saved run offline from the local `cache/` written by a previous `fresh` run, into `outputs/replay/`. **`cache/` is not committed** (gitignored, about 5 MB), so a fresh clone cannot replay 24 September; run `fresh` first. Yahoo revises history, so a later fresh download need not reproduce every saved value.
 - `main.py --render-only` rebuilds the PM note and dashboard from saved outputs without any download. `main.py --enrich-only` refreshes the optional SEC context without changing any signal.
 - Tested on Python 3.11.4; the exact environment is in `requirements-lock.txt`.
+
+## Weekly operating cycle
+
+What the code does today:
+
+1. **Thursday after the close:** `./run.sh fresh` refreshes the current constituent snapshot, downloads enough daily history, selects the latest completed Thursday, validates each required window, recomputes cross-sectional ranks, applies the fixed rules, selects up to ten names, saves the signal tables, adds optional SEC context, and renders the note and dashboard.
+2. **Friday before the close:** the saved observation timestamp keeps Friday `pending`; a partial daily bar cannot become an outcome.
+3. **Friday after the close:** another fresh run rebuilds the study and classifies the immediate Friday as continuation, neutral or stall. A Friday holiday is skipped; Monday is never substituted.
+4. **Following week:** repeat. The target Thursday, universe, data window, eligible population, ranks, qualifiers, leans, SEC context and completed-Friday sample can change. The 5/3/20-session windows, three qualification thresholds, score formulas, top-10 limit and Friday label definitions remain fixed.
+
+This is a repeatable research script, not an unattended service. A fresh run overwrites the current files rather than appending an immutable dated weekly archive, and Friday refresh currently recomputes the Thursday features from the same downloaded history instead of loading a separately locked Thursday artifact. Commit or copy each Thursday's `outputs/` before refreshing it if prospective records are required.
+
+## Core versus optional context
+
+- **Core:** Yahoo price/volume features, SPY-relative ranks, qualification, lean and Friday evidence.
+- **Optional:** SEC EDGAR filings for the current displayed shortlist. SEC failures cannot change the core signal.
+- **Future:** direct point-in-time news or social-attention data; neither is claimed or required now.
 
 ## Reading the screen
 

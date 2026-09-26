@@ -17,7 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class SubmissionTests(unittest.TestCase):
     def test_required_assignment_artifacts_exist(self):
         required = [
-            "README.md", "RESEARCH_SPEC.md", "requirements.txt", "main.py", "run.sh",
+            "README.md", "RESEARCH_SPEC.md", "docs/methodology-flow.md",
+            "requirements.txt", "main.py", "run.sh",
             "outputs/current_thursday_screen.csv", "outputs/current_thursday_screen.md",
             "outputs/historical_summary.md", "outputs/historical_thursday_screens.csv",
             "outputs/pm_note_screen.md", "outputs/pm_note_portfolio_alert.md",
@@ -25,6 +26,15 @@ class SubmissionTests(unittest.TestCase):
         ]
         missing = [name for name in required if not (ROOT / name).is_file()]
         self.assertEqual(missing, [])
+
+    def test_readme_links_the_detailed_flow(self):
+        readme = (ROOT / "README.md").read_text()
+        self.assertIn("```mermaid", readme)
+        self.assertIn("[detailed calculation, timing and exclusion flow](docs/methodology-flow.md)", readme)
+        detail = (ROOT / "docs/methodology-flow.md").read_text()
+        self.assertIn("```mermaid", detail)
+        for threshold in ["Excess return > 0", "RVOL > 1", "Compression < 1"]:
+            self.assertIn(threshold, detail)
 
     def test_launcher_and_cli_are_valid(self):
         subprocess.run(["bash", "-n", str(ROOT / "run.sh")], check=True)
