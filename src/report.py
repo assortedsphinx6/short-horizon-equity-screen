@@ -1,5 +1,6 @@
 """Human-readable reports generated from real saved tables."""
 import json
+from pathlib import Path
 
 import pandas as pd
 
@@ -7,6 +8,22 @@ from config import LEAN_MIDPOINT
 
 # Display wording only: a lean score this close to 50 is described as near neutral.
 NEAR_NEUTRAL_POINTS = 1.0
+
+# Every output folder has the same layout: human-facing files in deliverables/, machine-readable tables in data/.
+DELIVERABLES_DIR = "deliverables"
+DATA_DIR = "data"
+
+
+def deliverable_file(out, name):
+    folder = Path(out) / DELIVERABLES_DIR
+    folder.mkdir(parents=True, exist_ok=True)
+    return folder / name
+
+
+def data_file(out, name):
+    folder = Path(out) / DATA_DIR
+    folder.mkdir(parents=True, exist_ok=True)
+    return folder / name
 
 PORTFOLIO_NOTE = """# Portfolio alert: proposed operational defaults
 
@@ -37,28 +54,28 @@ def markdown_table(frame):
 
 
 def write_screen(out, screen, candidates, date, label, meta):
-    screen.to_csv(out / "current_thursday_screen.csv", index=False)
-    candidates.to_csv(out / "current_thursday_candidates_audit.csv", index=False)
+    screen.to_csv(data_file(out, "current_thursday_screen.csv"), index=False)
+    candidates.to_csv(data_file(out, "current_thursday_candidates_audit.csv"), index=False)
     cols = ["ticker", "stock_impulse_return", "excess_return", "rvol", "compression_ratio",
             "excess_return_percentile", "rvol_percentile", "excitement_score", "retention", "close_location",
             "consolidation_rs_percentile", "lean_score", "lean", "reason"]
-    (out / "current_thursday_screen.md").write_text(
+    deliverable_file(out, "current_thursday_screen.md").write_text(
         f"# {date.date()}: {label}\n\n{len(candidates)} qualifying; {len(screen)} displayed, "
         f"{int((~candidates.scorable.astype(bool)).sum())} qualifying but unscorable.\n\n"
         f"Run UTC: {meta['run_at_utc']}; market time zone America/New_York. "
         f"Data observed: {meta['data_observed_at_utc']}; latest completed SPY bar: {meta['data_as_of']}.\n\n"
         "Returns and percentiles are fractions; scores are 0–100, RVOL/compression are ratios. "
-        "CSV retains full precision. Lean is a heuristic, not a probability.\n\n" +
+        "data/current_thursday_screen.csv retains full precision. Lean is a heuristic, not a probability.\n\n" +
         markdown_table(screen[[c for c in cols if c in screen]]) + "\n")
 
 
 def load_saved_outputs(out):
     """Everything PM-facing is read back from the saved core outputs, never recomputed."""
-    meta = json.loads((out / "run_metadata.json").read_text())
-    read = lambda name: pd.read_csv(out / name, float_precision="round_trip")
+    meta = json.loads(data_file(out, "run_metadata.json").read_text())
+    read = lambda name: pd.read_csv(data_file(out, name), float_precision="round_trip")
     audit = read("thursday_audit.csv")
     exclusions = read("feature_exclusions.csv")
-    context_path = out / "current_screen_context.csv"
+    context_path = data_file(out, "current_screen_context.csv")
     return dict(
         meta=meta, screen=read("current_thursday_screen.csv"),
         candidates=read("current_thursday_candidates_audit.csv"),
@@ -138,12 +155,12 @@ def write_pm_note(out):
         "stalls or returns vs SPY once close location, which mechanically favours breakouts, is removed.",
     ]
     assert len(lines) == 8 and all(lines)
-    (out / "pm_note_screen.md").write_text("\n".join(lines) + "\n")
+    deliverable_file(out, "pm_note_screen.md").write_text("\n".join(lines) + "\n")
 
 
 def write_history(out, audit, exclusions, joined, totals, buckets, sanity, meta):
     for name, table in [("outcome_summary", totals), ("lean_buckets", buckets), ("lean_sanity", sanity)]:
-        table.to_csv(out / f"{name}.csv", index=False)
+        table.to_csv(data_file(out, f"{name}.csv"), index=False)
     status = joined.groupby("status").size().rename("name_events").reset_index()
     exclusions_count = exclusions.groupby("reason").size().rename("name_dates").reset_index() if len(exclusions) else pd.DataFrame()
     findings = []
@@ -179,11 +196,11 @@ def write_history(out, audit, exclusions, joined, totals, buckets, sanity, meta)
             "Sparse buckets are underpowered; counts are shown and no statistical significance is claimed.\n\n"
             "## Higher/lower lean sanity check\n\n" + markdown_table(sanity) + "\n\n"
             "## Exclusions before ranking\n\n" + markdown_table(exclusions_count) + "\n\n"
-            "See thursday_audit.csv for missing benchmark windows and Thursday holidays; "
+            "In the data/ folder, see thursday_audit.csv for missing benchmark windows and Thursday holidays; "
             "universe_features.csv for valid rank populations; historical_thursday_screens.csv for all qualifiers.\n\n"
             "Current membership projected backward has survivorship/selection bias. Yahoo history may be revised "
             "and is not an archived Thursday data vintage. Thursday decisions were persisted before outcome joins. "
             "Same-Friday names are correlated, so name-events are not independent experiments. "
             "This is a descriptive recent-regime check, without threshold fitting, out-of-sample validation, "
             "execution costs, borrow constraints or trading P&L. News, sentiment and true order flow are unobserved.\n")
-    (out / "historical_summary.md").write_text(text)
+    deliverable_file(out, "historical_summary.md").write_text(text)

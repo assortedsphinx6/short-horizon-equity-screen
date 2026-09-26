@@ -21,10 +21,10 @@ class SubmissionTests(unittest.TestCase):
             "README.md", "RESEARCH_SPEC.md", "docs/methodology-flow.md",
             "fixtures/frozen_2026-09-24/manifest.json", "fixtures/frozen_2026-09-24/prices.csv.gz",
             "requirements.txt", "main.py", "run.sh",
-            "outputs/current_thursday_screen.csv", "outputs/current_thursday_screen.md",
-            "outputs/historical_summary.md", "outputs/historical_thursday_screens.csv",
-            "outputs/pm_note_screen.md", "outputs/pm_note_portfolio_alert.md",
-            "outputs/dashboard.html", "task.md",
+            "outputs/deliverables/dashboard.html", "outputs/deliverables/current_thursday_screen.md",
+            "outputs/deliverables/pm_note_screen.md", "outputs/deliverables/pm_note_portfolio_alert.md",
+            "outputs/deliverables/historical_summary.md", "outputs/data/current_thursday_screen.csv",
+            "outputs/data/historical_thursday_screens.csv", "task.md",
         ]
         missing = [name for name in required if not (ROOT / name).is_file()]
         self.assertEqual(missing, [])
@@ -51,18 +51,17 @@ class SubmissionTests(unittest.TestCase):
     def test_note_and_dashboard_are_exact_views_of_saved_outputs(self):
         with tempfile.TemporaryDirectory() as folder:
             out = Path(folder)
-            for path in (ROOT / "outputs").glob("*"):
-                if path.suffix in {".csv", ".json"}:
-                    shutil.copy(path, out / path.name)
+            shutil.copytree(ROOT / "outputs" / "data", out / "data")
             write_pm_note(out)
             write_dashboard(out)
             for name in ["pm_note_screen.md", "dashboard.html"]:
                 with self.subTest(name=name):
-                    self.assertEqual((out / name).read_text(), (ROOT / "outputs" / name).read_text())
+                    self.assertEqual((out / "deliverables" / name).read_text(),
+                                     (ROOT / "outputs" / "deliverables" / name).read_text())
 
     def test_dashboard_lists_saved_screen_without_unsupported_claims(self):
-        page = (ROOT / "outputs/dashboard.html").read_text()
-        screen = pd.read_csv(ROOT / "outputs/current_thursday_screen.csv")
+        page = (ROOT / "outputs/deliverables/dashboard.html").read_text()
+        screen = pd.read_csv(ROOT / "outputs/data/current_thursday_screen.csv")
         for r in screen.itertuples():
             self.assertIn(f"<span class='t'>{r.ticker}</span>", page)
             self.assertIn(f"lean score {r.lean_score:.1f}", page)
@@ -76,23 +75,21 @@ class SubmissionTests(unittest.TestCase):
     def test_dashboard_explains_the_actual_friday_status(self):
         with tempfile.TemporaryDirectory() as folder:
             out = Path(folder)
-            for path in (ROOT / "outputs").glob("*"):
-                if path.suffix in {".csv", ".json"}:
-                    shutil.copy(path, out / path.name)
-            audit = pd.read_csv(out / "thursday_audit.csv")
+            shutil.copytree(ROOT / "outputs" / "data", out / "data")
+            audit = pd.read_csv(out / "data" / "thursday_audit.csv")
             for status, phrase in [("pending", "outcome is pending"), ("completed", "are included in the evidence"),
                                    ("holiday", "Monday is not substituted")]:
                 audit.loc[audit.decision_date.eq("2026-09-24"), "friday_status"] = status
-                audit.to_csv(out / "thursday_audit.csv", index=False)
+                audit.to_csv(out / "data" / "thursday_audit.csv", index=False)
                 write_dashboard(out)
                 with self.subTest(status=status):
-                    self.assertIn(phrase, (out / "dashboard.html").read_text())
+                    self.assertIn(phrase, (out / "deliverables" / "dashboard.html").read_text())
 
     def test_no_platform_branding_or_developer_paths_in_submission(self):
         searchable = [
             ROOT / "README.md", ROOT / "RESEARCH_SPEC.md", ROOT / "main.py",
             *sorted((ROOT / "src").glob("*.py")),
-            ROOT / "outputs/dashboard.html",
+            ROOT / "outputs/deliverables/dashboard.html",
         ]
         forbidden = (
             "chat" + "gpt", "open" + "ai", "co" + "dex",
@@ -105,8 +102,8 @@ class SubmissionTests(unittest.TestCase):
                     self.assertNotIn(token, text)
 
     def test_pm_notes_meet_format_contract(self):
-        screen_lines = [line for line in (ROOT / "outputs/pm_note_screen.md").read_text().splitlines() if line.strip()]
-        alert_words = (ROOT / "outputs/pm_note_portfolio_alert.md").read_text().split()
+        screen_lines = [line for line in (ROOT / "outputs/deliverables/pm_note_screen.md").read_text().splitlines() if line.strip()]
+        alert_words = (ROOT / "outputs/deliverables/pm_note_portfolio_alert.md").read_text().split()
         self.assertEqual(len(screen_lines), 8)
         self.assertGreaterEqual(len(alert_words), 250)
         self.assertLessEqual(len(alert_words), 450)

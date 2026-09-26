@@ -15,7 +15,8 @@ from test_research import fixture
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUTS = ROOT / "outputs"
+DATA = ROOT / "outputs" / "data"
+DELIVERABLES = ROOT / "outputs" / "deliverables"
 
 
 def decisions(prices, calendar, thursday, tickers=("A", "B", "C")):
@@ -163,13 +164,13 @@ class ArithmeticAndInputAuditTests(unittest.TestCase):
 class SavedOutputAuditTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.decisions = pd.read_csv(OUTPUTS / "historical_thursday_screens.csv")
-        cls.outcomes = pd.read_csv(OUTPUTS / "friday_outcomes.csv")
+        cls.decisions = pd.read_csv(DATA / "historical_thursday_screens.csv")
+        cls.outcomes = pd.read_csv(DATA / "friday_outcomes.csv")
 
     def test_frozen_hash_unique_keys_and_date_contract(self):
         import hashlib
-        meta = json.loads((OUTPUTS / "run_metadata.json").read_text())
-        digest = hashlib.sha256((OUTPUTS / "historical_thursday_screens.csv").read_bytes()).hexdigest()
+        meta = json.loads((DATA / "run_metadata.json").read_text())
+        digest = hashlib.sha256((DATA / "historical_thursday_screens.csv").read_bytes()).hexdigest()
         self.assertEqual(digest, meta["thursday_decisions_sha256"])
         self.assertFalse(self.decisions.duplicated(["decision_date", "ticker"]).any())
         self.assertFalse(self.outcomes.duplicated(["decision_date", "ticker"]).any())
@@ -188,7 +189,7 @@ class SavedOutputAuditTests(unittest.TestCase):
         }
         for filename, computed in expected.items():
             with self.subTest(filename=filename):
-                saved = pd.read_csv(OUTPUTS / filename)
+                saved = pd.read_csv(DATA / filename)
                 assert_frame_equal(saved, computed, check_dtype=False, check_exact=False, rtol=1e-13, atol=1e-15)
 
     def test_counts_reconcile_and_incomplete_outcomes_have_no_labels(self):
@@ -201,12 +202,12 @@ class SavedOutputAuditTests(unittest.TestCase):
                                   ("pm_top10", completed.merge(self.decisions[["decision_date", "ticker", "pm_visible"]],
                                                                on=["decision_date", "ticker"], validate="one_to_one")
                                    .query("pm_visible == True"))]:
-            row = pd.read_csv(OUTPUTS / "outcome_summary.csv").set_index("population").loc[population]
+            row = pd.read_csv(DATA / "outcome_summary.csv").set_index("population").loc[population]
             self.assertEqual(int(row.n), len(frame))
             self.assertEqual(int(row.continuation_count + row.neutral_count + row.stall_count), len(frame))
 
     def test_pm_note_and_score_bounds(self):
-        lines = [line for line in (OUTPUTS / "pm_note_screen.md").read_text().splitlines() if line.strip()]
+        lines = [line for line in (DELIVERABLES / "pm_note_screen.md").read_text().splitlines() if line.strip()]
         self.assertEqual(len(lines), 8)
         self.assertTrue(self.decisions.excitement_score.between(0, 100).all())
         scored = self.decisions[self.decisions.scorable.astype(bool)]

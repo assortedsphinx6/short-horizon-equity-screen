@@ -23,10 +23,10 @@ class FrozenSnapshotIntegrationTest(unittest.TestCase):
                 "--cache-dir", str(ROOT / "fixtures/frozen_2026-09-24"),
                 "--output-dir", str(out),
             ], cwd=folder, check=True, capture_output=True, text=True, timeout=180)
-            meta = json.loads((out / "run_metadata.json").read_text())
-            screen = pd.read_csv(out / "current_thursday_screen.csv")
-            candidates = pd.read_csv(out / "current_thursday_candidates_audit.csv")
-            audit = pd.read_csv(out / "thursday_audit.csv")
+            meta = json.loads((out / "data" / "run_metadata.json").read_text())
+            screen = pd.read_csv(out / "data" / "current_thursday_screen.csv")
+            candidates = pd.read_csv(out / "data" / "current_thursday_candidates_audit.csv")
+            audit = pd.read_csv(out / "data" / "thursday_audit.csv")
             row = audit[audit.decision_date.eq(meta["decision_date"])].iloc[0]
 
             self.assertEqual(meta["decision_date"], "2026-09-24")
@@ -38,4 +38,4 @@ class FrozenSnapshotIntegrationTest(unittest.TestCase):
                              ["WBD", "SWKS", "CIEN", "QCOM", "AMD", "DXCM", "COIN", "FFIV", "CRWD", "INTC"])
             self.assertEqual(meta["thursday_decisions_sha256"],
                              "70123e0a0ade226fd23f325d67308263bafe96d4a230ddcdaac89189ff752f86")
-            self.assertTrue((out / "runs" / "2026-09-24" / "current_thursday_screen.csv").is_file())
+            self.assertTrue((out / "runs" / "2026-09-24" / "data" / "current_thursday_screen.csv").is_file())

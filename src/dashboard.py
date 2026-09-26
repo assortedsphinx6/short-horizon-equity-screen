@@ -3,7 +3,7 @@ from html import escape
 
 import pandas as pd
 
-from src.report import completed_fridays, lean_phrase, load_saved_outputs, pct
+from src.report import completed_fridays, deliverable_file, lean_phrase, load_saved_outputs, pct
 
 STYLE = """
 :root{--ink:#172235;--muted:#5d6b82;--line:#dce3ec;--paper:#f4f7fb;--card:#fff;--navy:#0d1c31;
@@ -23,8 +23,54 @@ td{padding:12px 10px;border-bottom:1px solid #e8edf3;vertical-align:top}.t{font-
 .continuation{background:var(--green2);color:var(--green)}.stall{background:var(--red2);color:var(--red)}
 .balanced,.weak{background:var(--grey2);color:var(--grey)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}ul{margin:6px 0 0;padding-left:18px}li{margin:4px 0}
+.tip{position:relative;cursor:help}.tip:focus{outline:2px solid #2563eb;outline-offset:2px;border-radius:4px}
+.tip-icon{display:inline-block;width:14px;height:14px;margin-left:4px;border-radius:50%;background:var(--grey2);
+color:var(--muted);font:700 10px/14px ui-sans-serif,sans-serif;text-align:center;text-transform:none;vertical-align:1px}
+.tip-text{visibility:hidden;opacity:0;position:absolute;z-index:10;top:calc(100% + 6px);left:0;width:280px;
+padding:10px 12px;border-radius:8px;background:var(--navy);color:#fff;font:400 .8rem/1.45 ui-sans-serif,sans-serif;
+letter-spacing:0;text-transform:none;white-space:normal;box-shadow:0 8px 24px rgba(13,28,49,.25)}
+.tip-r .tip-text{left:auto;right:0}.tip:hover .tip-text,.tip:focus .tip-text{visibility:visible;opacity:1}
 @media(max-width:800px){.kpis,.grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.kpis,.grid{grid-template-columns:1fr}}
 """
+
+
+# Hover/focus notes: static definitions only, matching README and RESEARCH_SPEC; every value stays data-driven.
+TIPS = {
+    "qualified": "All three strict rules: impulse return vs SPY > 0, RVOL > 1 and compression < 1.",
+    "friday": "pending: Friday had not closed at the observation time, so it is not evaluated. completed: "
+              "labelled continuation, neutral or stall. holiday: no Friday session; Monday is never substituted.",
+    "lean": "0-100 heuristic: equal-weight average of retention, close location and pause relative-strength "
+            "percentile. Above 50 = continuation lean, below 50 = stall lean, exactly 50 = balanced. "
+            "Not a probability.",
+    "excitement": "Average of two percentile ranks across all eligible constituent securities, computed before "
+                  "filtering: impulse return vs SPY and RVOL. 0-100; higher means a more unusual move plus "
+                  "volume. Sets the list order.",
+    "impulse": "The stock's five-session impulse return (close t-8 to close t-3) minus SPY's return over the "
+               "same sessions. Positive means the stock outperformed the market during the impulse; it must "
+               "be above 0 to qualify.",
+    "rvol": "Average daily volume in the five impulse sessions (t-7 to t-3) divided by the median daily volume "
+            "of the 20 sessions before them (t-27 to t-8). Above 1 means above-baseline participation; it must "
+            "be above 1 to qualify.",
+    "compression": "Range of the three consolidation sessions (t-2 to Thursday) divided by the stock's typical "
+                   "three-session range (median of 18 comparable baseline ranges). Below 1 means the pause is "
+                   "tighter than normal; it must be below 1 to qualify.",
+    "inputs": "Kept % of move (retention): share of the impulse gain still held at Thursday's close, capped at "
+              "0-100%. Closed at % of range (close location): Thursday's close within the three-session range, "
+              "0% = low, 100% = high. Pause RS percentile: stock return minus SPY's during the consolidation, "
+              "ranked against all eligible securities.",
+    "sec": "Optional context only: target SEC filings (8-K, 10-Q, 10-K, 6-K, 20-F) accepted from impulse start "
+           "to Thursday 20:00 New York time. Never affects qualification, excitement or lean. Unavailable does "
+           "not mean no filing.",
+    "outcomes": "Continuation = Friday close above Thursday's three-session high; stall = Friday close at or "
+                "below Thursday's close; neutral = any other completed Friday. Only completed Fridays count.",
+}
+
+
+def tip(label, key, align=""):
+    """Label with an accessible CSS-only note shown on hover and on keyboard focus."""
+    return (f'<span class="tip{align}" tabindex="0" aria-describedby="tip-{key}">{label}'
+            f'<span class="tip-icon" aria-hidden="true">i</span>'
+            f'<span class="tip-text" role="tooltip" id="tip-{key}">{escape(TIPS[key])}</span></span>')
 
 
 def sec_text(context, ticker):
@@ -107,26 +153,26 @@ def write_dashboard(out):
 it is not a probability or a trade recommendation. Scores close to 50 carry little direction.
 <div class="kpis"><div class="kpi"><b>{int(meta['universe_count'])}</b><span>constituent securities loaded</span></div>
 <div class="kpi"><b>{int(audit.eligible_universe_count)}</b><span>eligible and ranked</span></div>
-<div class="kpi"><b>{len(v['candidates'])}</b><span>passed all three filters</span></div>
+<div class="kpi"><b>{len(v['candidates'])}</b><span>{tip("passed all three filters", "qualified")}</span></div>
 <div class="kpi"><b>{len(screen)}</b><span>shown (top by excitement)</span></div></div>
 <span class="muted">Excluded before ranking: {excluded}. The other qualifiers are in
-<code>current_thursday_candidates_audit.csv</code>.</span></div>
+<code>data/current_thursday_candidates_audit.csv</code>.</span></div>
 <h2>Data-quality status</h2>
 <div class="panel"><div class="kpis">
 <div class="kpi"><b>{escape(str(meta['data_as_of']))}</b><span>latest completed market bar</span></div>
 <div class="kpi"><b>{len(failures)}</b><span>unresolved Yahoo downloads</span></div>
 <div class="kpi"><b>{len(v['exclusions'])}</b><span>securities excluded on this Thursday</span></div>
-<div class="kpi"><b>{escape(friday_status)}</b><span>immediate Friday status</span></div>
+<div class="kpi"><b>{escape(friday_status)}</b><span>{tip("immediate Friday status", "friday", " tip-r")}</span></div>
 </div><span class="muted">Observation frozen at {observed:%Y-%m-%d %H:%M} America/New_York. {escape(friday_text)}
 Unavailable input is never treated as a negative signal.</span></div>
 <h2>Thursday list</h2>
-<div class="panel scroll"><table><thead><tr><th>Name</th><th>Lean</th><th>Excitement</th><th>Impulse vs SPY</th>
-<th>RVOL</th><th>Compression</th><th>Lean inputs</th><th>Reason</th><th>SEC context</th></tr></thead>
+<div class="panel scroll"><table><thead><tr><th>Name</th><th>{tip("Lean", "lean")}</th><th>{tip("Excitement", "excitement")}</th><th>{tip("Impulse vs SPY", "impulse")}</th>
+<th>{tip("RVOL", "rvol")}</th><th>{tip("Compression", "compression")}</th><th>{tip("Lean inputs", "inputs")}</th><th>Reason</th><th>{tip("SEC context", "sec", " tip-r")}</th></tr></thead>
 <tbody>{rows}</tbody></table></div>
 <p class="muted">Qualification: impulse return vs SPY &gt; 0, RVOL &gt; 1, compression &lt; 1 (all strict).
 Excitement = average of the excess-return and RVOL percentiles across all eligible stocks. SEC context never
 affects qualification, ranking or lean.</p>
-<h2>What happened on past Fridays</h2>
+<h2>{tip("What happened on past Fridays", "outcomes")}</h2>
 <p class="muted">{completed_fridays(v['audit'])} completed Fridays in the last {int(meta['months'])} months, same fixed rules.
 Continuation = Friday close above Thursday's three-day high; stall = Friday close at or below Thursday's close;
 otherwise neutral. Descriptive only.</p>
@@ -146,4 +192,4 @@ filters little, and the RVOL percentile inside the excitement score does most of
 <p class="small">Generated from the saved CSV outputs of this run; rerun the pipeline to refresh.</p>
 </main></body></html>
 """
-    (out / "dashboard.html").write_text(page)
+    deliverable_file(out, "dashboard.html").write_text(page)

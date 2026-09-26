@@ -68,6 +68,6 @@ Sparse buckets are underpowered; counts are shown and no statistical significanc
 | missing_or_nonfinite_ohlcv | 94 |
 | split_in_required_window | 100 |
 
-See thursday_audit.csv for missing benchmark windows and Thursday holidays; universe_features.csv for valid rank populations; historical_thursday_screens.csv for all qualifiers.
+In the data/ folder, see thursday_audit.csv for missing benchmark windows and Thursday holidays; universe_features.csv for valid rank populations; historical_thursday_screens.csv for all qualifiers.
 
 Current membership projected backward has survivorship/selection bias. Yahoo history may be revised and is not an archived Thursday data vintage. Thursday decisions were persisted before outcome joins. Same-Friday names are correlated, so name-events are not independent experiments. This is a descriptive recent-regime check, without threshold fitting, out-of-sample validation, execution costs, borrow constraints or trading P&L. News, sentiment and true order flow are unobserved.

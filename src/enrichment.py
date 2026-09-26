@@ -11,7 +11,7 @@ import pandas as pd
 import requests
 
 from src.data import SOURCE, schedule
-from src.report import markdown_table
+from src.report import data_file, markdown_table
 
 SEC_TICKERS = "https://www.sec.gov/files/company_tickers.json"
 SEC_SUBMISSIONS = "https://data.sec.gov/submissions/"
@@ -217,12 +217,12 @@ def enrich_shortlist(screen, members, meta, out, *, offline=False, now=None, cac
                 row.update(sec_status="unavailable", sec_error=str(exc))
         rows.append(row)
     context = pd.DataFrame(rows, columns=CONTEXT_COLUMNS)
-    context.to_csv(out / "current_screen_context.csv", index=False)
+    context.to_csv(data_file(out, "current_screen_context.csv"), index=False)
     manifest = dict(decision_date=str(decision.date()), context_cutoff_utc=cutoff.isoformat(),
                     generated_at_utc=now.isoformat(), current_scope=eligible, offline_replay=offline,
                     warnings=warnings, requests=client.provenance,
                     sec_status_counts=context.sec_status.value_counts().to_dict())
-    (out / "context_metadata.json").write_text(json.dumps(manifest, indent=2))
+    data_file(out, "context_metadata.json").write_text(json.dumps(manifest, indent=2))
     text = (f"# Shortlist context: {decision.date()}\n\n"
             f"Context cutoff: **{cutoff.isoformat()}** (Thursday night, at most 20:00 America/New_York). "
             f"Fetched/replayed: {now.isoformat()}. This is a bounded reconstruction, not an archived Thursday data vintage.\n\n"
@@ -244,5 +244,5 @@ def enrich_shortlist(screen, members, meta, out, *, offline=False, now=None, cac
         text += "\n"
     text += ("\nSource corrections and filing dissemination delays prevent an exact archived information-set claim. "
              "No historical SEC outcome evaluation was performed.\n")
-    (out / "current_screen_context.md").write_text(text)
+    data_file(out, "current_screen_context.md").write_text(text)
     return manifest

@@ -88,7 +88,7 @@ class September24OracleTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.o = oracle()
-        cls.saved = pd.read_csv(ROOT / "outputs" / "universe_features.csv", float_precision="round_trip")
+        cls.saved = pd.read_csv(ROOT / "outputs" / "data" / "universe_features.csv", float_precision="round_trip")
         cls.saved = cls.saved[cls.saved.decision_date.eq(THURSDAY)].set_index("ticker")
 
     def test_session_positions_are_trading_sessions_across_labor_day(self):
@@ -116,8 +116,8 @@ class September24OracleTests(unittest.TestCase):
                                                check_names=False, rtol=0, atol=1e-12)
 
     def test_saved_qualifiers_screen_and_cutoff_match_the_oracle(self):
-        audit = pd.read_csv(ROOT / "outputs" / "current_thursday_candidates_audit.csv")
-        screen = pd.read_csv(ROOT / "outputs" / "current_thursday_screen.csv")
+        audit = pd.read_csv(ROOT / "outputs" / "data" / "current_thursday_candidates_audit.csv")
+        screen = pd.read_csv(ROOT / "outputs" / "data" / "current_thursday_screen.csv")
         self.assertEqual(audit.ticker.tolist(), self.o["qualified"])
         self.assertEqual(screen.ticker.tolist(), self.o["shown"])
         f = self.o["features"]

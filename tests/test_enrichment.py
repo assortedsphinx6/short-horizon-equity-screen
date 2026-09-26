@@ -88,7 +88,7 @@ class EnrichmentTests(unittest.TestCase):
             with patch("src.enrichment.cik_mapping", return_value=({"AAA": (1, "fixture")}, [])), \
                  patch("src.enrichment.sec_context", side_effect=SourceUnavailable("fixture SEC outage")):
                 enrich_shortlist(screen, members, meta, out, now=NOW, cache_root=out / "cache")
-            context = pd.read_csv(out / "current_screen_context.csv")
+            context = pd.read_csv(out / "data" / "current_screen_context.csv")
             self.assertEqual(context.iloc[0].sec_status, "unavailable")
             self.assertTrue(pd.isna(context.iloc[0].sec_filing_count))
             assert_frame_equal(screen, original)
@@ -102,7 +102,7 @@ class EnrichmentTests(unittest.TestCase):
                  patch("src.enrichment.sec_context", return_value=dict(sec_status="none", sec_filing_count=0)):
                 enrich_shortlist(screen, members, meta, out, offline=True, now=after_friday_close,
                                  cache_root=out / "cache")
-            self.assertEqual(pd.read_csv(out / "current_screen_context.csv").iloc[0].sec_status, "none")
+            self.assertEqual(pd.read_csv(out / "data" / "current_screen_context.csv").iloc[0].sec_status, "none")
 
     def test_historical_and_empty_screens_make_no_source_calls(self):
         screen, members, meta = screen_inputs()
@@ -114,7 +114,7 @@ class EnrichmentTests(unittest.TestCase):
                 with patch.object(ContextClient, "get") as get:
                     enrich_shortlist(selected, members, meta, out, now=NOW, cache_root=out / "cache")
                     get.assert_not_called()
-                context = pd.read_csv(out / "current_screen_context.csv")
+                context = pd.read_csv(out / "data" / "current_screen_context.csv")
                 if historical:
                     self.assertEqual(context.iloc[0].sec_status, "not_requested_historical")
                 else:

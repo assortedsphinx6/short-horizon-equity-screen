@@ -20,7 +20,27 @@ Then, to screen the latest completed Thursday with current public data:
 ./run.sh fresh     # network: Wikipedia, Yahoo Finance, SEC EDGAR; about 2–3 minutes
 ```
 
-**Dashboard:** open `outputs/dashboard.html` directly in any browser. It is one self-contained file (inline styles, data embedded, no scripts or network requests), so no server is needed. `./run.sh dashboard` is only an optional convenience that serves the same file at `http://127.0.0.1:8765/dashboard.html` (port set by `DASHBOARD_PORT`).
+## What to open
+
+```text
+outputs/
+├── deliverables/   human-readable submission artifacts: start here
+├── data/           machine-readable evidence the deliverables are built from
+└── runs/           immutable dated snapshots; runs/2026-09-24/ is the submission
+```
+
+**Start here:** open `outputs/deliverables/dashboard.html` directly in any browser. It is one self-contained file (inline styles, data embedded, no scripts or network requests), so no server is needed. Hover over, or tab to, any label marked ⓘ for a short definition. `./run.sh dashboard` is only an optional convenience that serves the same file at `http://127.0.0.1:8765/dashboard.html` (port set by `DASHBOARD_PORT`).
+
+The other files in `outputs/deliverables/`:
+
+- `current_thursday_screen.md`: the Thursday list with every rule input, lean and one-line reason.
+- `pm_note_screen.md`: the eight-line note to the PM.
+- `pm_note_portfolio_alert.md`: the half-page portfolio-alert proposal.
+- `historical_summary.md`: what happened on past Fridays, with every denominator.
+
+`outputs/data/` is not clutter: it holds the machine-readable files the deliverables are generated from, so any claim can be traced by hand. It keeps all qualifiers (not just the ten shown), the full ranked population with every feature value, pre-ranking exclusions such as APH's split, every historical candidate event and its Friday outcome, run metadata (observation time, decision hash) and the optional SEC context. See [Supporting data](#supporting-data) for the file list.
+
+`outputs/runs/2026-09-24/` preserves the submitted run exactly as it was saved, in the same `deliverables/` and `data/` layout, and is never overwritten. `./run.sh replay` writes the same layout to `outputs/replay/`, which Git ignores.
 
 ## Command reference
 
@@ -29,8 +49,8 @@ Then, to screen the latest completed Thursday with current public data:
 | Install | `./run.sh setup` | PyPI | `.venv/` | None |
 | Fast tests | `./run.sh test` | Offline; committed outputs and synthetic fixtures | Temporary folders only | None. The slow integration test is skipped here |
 | Frozen end-to-end test | `./run.sh integration` | Offline; committed fixture | Temporary folder | None. Checks the 503 → 502 → 65 → 10 funnel, ticker order and decision hash |
-| Reproduce the submission | `./run.sh replay` | Offline; always `fixtures/frozen_2026-09-24/` | `outputs/replay/` (ignored by Git) | None: root `outputs/` and the dated archive are untouched |
-| Current screen | `./run.sh fresh` | Live Wikipedia constituents, Yahoo daily bars, SEC if the Friday is still pending | `outputs/`, `outputs/runs/<Thursday>/`, `cache/` | Replaces the root `outputs/` files; adds a dated archive, but never overwrites an existing one |
+| Reproduce the submission | `./run.sh replay` | Offline; always `fixtures/frozen_2026-09-24/` | `outputs/replay/` (ignored by Git) | None: `outputs/deliverables/`, `outputs/data/` and the dated archive are untouched |
+| Current screen | `./run.sh fresh` | Live Wikipedia constituents, Yahoo daily bars, SEC if the Friday is still pending | `outputs/deliverables/`, `outputs/data/`, `outputs/runs/<Thursday>/`, `cache/` | Replaces `outputs/deliverables/` and `outputs/data/`; adds a dated archive, but never overwrites an existing one |
 | Serve the dashboard (optional) | `./run.sh dashboard` | Local only | Nothing | None |
 
 Advanced `main.py` options, run as `.venv/bin/python main.py …`:
@@ -53,9 +73,9 @@ Tested on Python 3.11.4 (exact environment in `requirements-lock.txt`) and in a 
 **`./run.sh fresh`** runs the screen on today's public data.
 
 - It fetches the current S&P 500 constituent list, downloads Yahoo daily bars, and screens the latest Thursday whose close has completed.
-- It rewrites the root files in `outputs/` and rebuilds the 12-month event study with the same fixed rules.
+- It rewrites `outputs/deliverables/` and `outputs/data/` and rebuilds the 12-month event study with the same fixed rules.
 - Numbers can differ slightly from the frozen snapshot even for the same Thursday, because Yahoo revises adjusted history.
-- **Dated archive:** each run also saves `outputs/runs/<Thursday>/`. An existing dated folder is never overwritten. If a later run of the same Thursday produces different numbers, the frozen folder is kept, a `NOTE: existing archived decision … preserved` message is printed, `archive_status` is recorded in `outputs/run_metadata.json`, and the run still succeeds. This is why `outputs/runs/2026-09-24/` exists alongside the root files: the root files show the latest run, the dated folder keeps the submitted one.
+- **Dated archive:** each run also saves `outputs/runs/<Thursday>/`. An existing dated folder is never overwritten. If a later run of the same Thursday produces different numbers, the frozen folder is kept, a `NOTE: existing archived decision … preserved` message is printed, `archive_status` is recorded in `outputs/data/run_metadata.json`, and the run still succeeds. This is why `outputs/runs/2026-09-24/` exists alongside `outputs/deliverables/` and `outputs/data/`: those show the latest run, the dated folder keeps the submitted one.
 
 Weekly use: run `fresh` after the Thursday close. Until Friday closes, that Friday stays `pending`. Any later run labels the completed Friday with the same rules. This is a repeatable research script, not a production service or a live Friday monitor.
 
@@ -101,7 +121,7 @@ A Friday is labelled only after that Friday's session has fully closed, using co
 - **stall**: otherwise, Friday close ≤ Thursday close.
 - **neutral**: every other completed case (a positive close still inside the range).
 
-Each name's Friday also has a status (`status` in `friday_outcomes.csv`; `thursday_audit.csv` records the per-Thursday `friday_status`, which is one of the first three):
+Each name's Friday also has a status (`status` in `outputs/data/friday_outcomes.csv`; `outputs/data/thursday_audit.csv` records the per-Thursday `friday_status`, which is one of the first three):
 
 | Status | Meaning | In the evidence? |
 | --- | --- | --- |
@@ -114,7 +134,7 @@ The observation time is frozen before any download, and a bar only counts once i
 
 ## Reading the dashboard and screen
 
-`outputs/dashboard.html` is generated from the saved CSV/JSON outputs every time the pipeline runs; it holds no numbers of its own.
+`outputs/deliverables/dashboard.html` is generated from the files in `outputs/data/` every time the pipeline runs; it holds no numbers of its own. Its ⓘ notes define Excitement, Impulse vs SPY, RVOL, Compression, Lean and its inputs, SEC context, the Friday status and the Friday labels; exact formulas are in the definitions table above and in [RESEARCH_SPEC.md](RESEARCH_SPEC.md).
 
 1. **Funnel:** constituent securities loaded → eligible and ranked → passed all three rules → shown, plus pre-ranking exclusions.
 2. **Data-quality status:** latest completed bar, failed downloads, exclusions, and the immediate Friday status with a sentence explaining it.
@@ -123,7 +143,7 @@ The observation time is frozen before any download, and a bar only counts once i
 5. **Lean and its inputs:** retention, close location and pause relative-strength percentile. Scores close to 50 carry little direction.
 6. **Evidence and SEC context:** past-Friday rates for higher vs lower leans, and the optional filing check.
 
-`outputs/current_thursday_screen.md` (readable) and `.csv` (full precision) contain the same rows:
+`outputs/deliverables/current_thursday_screen.md` (readable) and `outputs/data/current_thursday_screen.csv` (full precision) contain the same rows:
 
 | Column | Meaning |
 | --- | --- |
@@ -139,7 +159,7 @@ The observation time is frozen before any download, and a bar only counts once i
 
 This section describes the frozen, committed run. Data observed 25 September 2026, 14:01 America/New_York, while Friday was still trading, so its Friday outcomes are **pending**.
 
-**503** S&P 500 constituent securities loaded (more than 500 because some issuers have several share classes) − **APH**, excluded because a stock split fell inside its required window = **502** eligible and ranked → **65** passed all three rules → **10** displayed. The other 55 qualifiers are in `outputs/current_thursday_candidates_audit.csv`.
+**503** S&P 500 constituent securities loaded (more than 500 because some issuers have several share classes) − **APH**, excluded because a stock split fell inside its required window = **502** eligible and ranked → **65** passed all three rules → **10** displayed. The other 55 qualifiers are in `outputs/data/current_thursday_candidates_audit.csv`.
 
 | Ticker | Excitement | Lean score | Lean |
 | --- | ---: | ---: | --- |
@@ -154,7 +174,7 @@ This section describes the frozen, committed run. Data observed 25 September 202
 | CRWD | 84.36 | 91.44 | continuation |
 | INTC | 84.16 | 98.80 | continuation |
 
-Seven of the ten are Information Technology, so the list is closer to one sector theme than ten independent ideas. The PM note is `outputs/pm_note_screen.md`.
+Seven of the ten are Information Technology, so the list is closer to one sector theme than ten independent ideas. The PM note is `outputs/deliverables/pm_note_screen.md`.
 
 ## Evidence: what happened on Fridays
 
@@ -169,7 +189,7 @@ The same fixed rules were rerun on every Thursday from 25 September 2025 to 24 S
 - Part of the breakout gap is mechanical: a Thursday close near the top of the range is already close to the breakout line.
 - The 2,448 completed candidate events are clustered across only 46 completed Fridays, and names on the same Friday are correlated, so they should not be read as thousands of independent observations. No significance is claimed, and no costs, sizing or P&L are modelled.
 
-Exact denominators, lean buckets and exclusions are in `outputs/historical_summary.md`.
+Exact denominators, lean buckets and exclusions are in `outputs/deliverables/historical_summary.md`.
 
 **Traps, named.**
 
@@ -196,28 +216,24 @@ For 24 September all ten names returned `none` in the live run; `replay` shows `
 
 ## Portfolio alert
 
-`outputs/pm_note_portfolio_alert.md` is a half-page, no-code proposal for "doing well quickly on many positions". It defines doing well (at least 1% net gain per position, qualifying gains at least 0.25% of NAV), quickly (within 60 minutes of entry; the note explains the alternative "recent acceleration of the existing book" reading), many (at least 3 positions and at least 30% of open positions), a five-minute check cadence, and anti-noise rules (two consecutive confirmations, fire once, rearm only after two non-qualifying checks and 60 minutes). It is conceptual and untested; validating it needs internal positions and marks.
+`outputs/deliverables/pm_note_portfolio_alert.md` is a half-page, no-code proposal for "doing well quickly on many positions". It defines doing well (at least 1% net gain per position, qualifying gains at least 0.25% of NAV), quickly (within 60 minutes of entry; the note explains the alternative "recent acceleration of the existing book" reading), many (at least 3 positions and at least 30% of open positions), a five-minute check cadence, and anti-noise rules (two consecutive confirmations, fire once, rearm only after two non-qualifying checks and 60 minutes). It is conceptual and untested; validating it needs internal positions and marks.
 
-## Outputs
+## Supporting data
 
-All in `outputs/` unless noted.
+Files in `outputs/data/`. The dashboard and notes are built from them; none is needed just to read the deliverables.
 
 | File | What it is for |
 | --- | --- |
-| `dashboard.html` | Self-contained view of the run; open directly |
-| `current_thursday_screen.{md,csv}` | The Thursday list: every rule input, lean and reason |
+| `current_thursday_screen.csv` | The displayed list at full precision |
 | `current_thursday_candidates_audit.csv` | Every qualifier for that Thursday, not just the ten shown |
-| `pm_note_screen.md` | Eight-line PM note, generated from the saved outputs |
-| `pm_note_portfolio_alert.md` | Half-page alert proposal |
-| `historical_summary.md` | Readable Friday evidence with denominators and exclusions |
-| `outcome_summary.csv`, `lean_buckets.csv`, `lean_sanity.csv` | The evidence tables behind the summary, note and dashboard |
-| `historical_thursday_screens.csv`, `friday_outcomes.csv` | Every historical qualifier, and its Friday status and label, kept in separate files |
 | `universe_features.csv` | The full ranked population on every Thursday (shows ranking happens before filtering) |
+| `historical_thursday_screens.csv`, `friday_outcomes.csv` | Every historical qualifier, and its Friday status and label, kept in separate files |
+| `outcome_summary.csv`, `lean_buckets.csv`, `lean_sanity.csv` | The evidence tables behind the summary, note and dashboard |
 | `thursday_audit.csv`, `feature_exclusions.csv` | Per-Thursday status and every pre-ranking exclusion with its reason |
 | `run_metadata.json`, `universe_snapshot.csv` | Data provenance, observation time, decision hash, archive status and the exact constituent list |
 | `current_screen_context.{md,csv}`, `context_metadata.json` | Optional SEC context and request provenance |
-| `runs/<Thursday>/` | Immutable dated snapshot; `runs/2026-09-24/` is the submitted run |
-| `replay/` | Created by `./run.sh replay`; not committed |
+
+`outputs/runs/2026-09-24/data/` holds the same files as saved by the submitted run, except `universe_features.csv`, which that run kept only in the latest-run folder.
 
 A failed core run writes `outputs/RUN_FAILED.txt`; a failed SEC step writes `outputs/ENRICHMENT_FAILED.txt` and leaves the core results valid.
 

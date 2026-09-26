@@ -16,7 +16,8 @@ from src.data import download, load_cache, save_cache, schedule, universe
 from src.enrichment import enrich_shortlist
 from src.evaluate import evaluate, session_status, summary_tables
 from src.features import build_features
-from src.report import PORTFOLIO_NOTE, markdown_table, write_history, write_pm_note, write_screen
+from src.report import (DATA_DIR, DELIVERABLES_DIR, PORTFOLIO_NOTE, data_file, deliverable_file, markdown_table,
+                        write_history, write_pm_note, write_screen)
 from src.screen import rank_and_screen
 
 PACKAGE_NAMES = ["pandas", "numpy", "yfinance", "requests", "lxml", "pandas_market_calendars"]
@@ -159,17 +160,17 @@ def save_historical_study(study, prices, members, calendar, observed_at, metadat
         "feature_exclusions.csv": study["exclusions"], "thursday_audit.csv": study["audit"],
         "universe_snapshot.csv": members,
     }.items():
-        frame.to_csv(output_dir / filename, index=False)
-    history_path = output_dir / "historical_thursday_screens.csv"
+        frame.to_csv(data_file(output_dir, filename), index=False)
+    history_path = data_file(output_dir, "historical_thursday_screens.csv")
     frozen_hash = hashlib.sha256(history_path.read_bytes()).hexdigest()
     outcomes = evaluate(decisions, prices, calendar, observed_at)
-    outcomes.to_csv(output_dir / "friday_outcomes.csv", index=False)
+    outcomes.to_csv(data_file(output_dir, "friday_outcomes.csv"), index=False)
     joined, totals, buckets, sanity = summary_tables(decisions, outcomes)
     write_history(output_dir, study["audit"], study["exclusions"], joined, totals, buckets, sanity, metadata)
     metadata.update(thursday_decisions_sha256=frozen_hash, calendar_thursdays=len(study["audit"]),
                     scanned_thursdays=int(study["audit"].scanned.sum()), qualified_name_events=len(decisions),
                     completed_name_events=int(outcomes.status.eq("completed").sum()))
-    (output_dir / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
+    data_file(output_dir, "run_metadata.json").write_text(json.dumps(metadata, indent=2))
     (output_dir / "RUN_FAILED.txt").unlink(missing_ok=True)
     return totals
 
@@ -184,15 +185,15 @@ def enrich_saved_screen(output_dir, *, offline=False, now=None):
     """Verify the frozen shortlist, then add context without altering signals."""
     if (output_dir / "RUN_FAILED.txt").exists():
         raise ValueError("Saved run is marked failed; rerun the Yahoo core before enrichment")
-    metadata = json.loads((output_dir / "run_metadata.json").read_text())
-    history_path = output_dir / "historical_thursday_screens.csv"
+    metadata = json.loads(data_file(output_dir, "run_metadata.json").read_text())
+    history_path = data_file(output_dir, "historical_thursday_screens.csv")
     if hashlib.sha256(history_path.read_bytes()).hexdigest() != metadata["thursday_decisions_sha256"]:
         raise ValueError("Saved Thursday decisions do not match their recorded hash")
-    screen = pd.read_csv(output_dir / "current_thursday_screen.csv", float_precision="round_trip")
+    screen = pd.read_csv(data_file(output_dir, "current_thursday_screen.csv"), float_precision="round_trip")
     history = pd.read_csv(history_path, float_precision="round_trip")
     expected = history[history.decision_date.eq(metadata["decision_date"]) & history.pm_visible].reset_index(drop=True)
     pd.testing.assert_frame_equal(screen, expected, check_dtype=False)
-    members = pd.read_csv(output_dir / "universe_snapshot.csv")
+    members = pd.read_csv(data_file(output_dir, "universe_snapshot.csv"))
     try:
         manifest = enrich_shortlist(screen, members, metadata, output_dir, offline=offline, now=now)
         print(f"SEC context status: {manifest['sec_status_counts']}")
@@ -206,28 +207,29 @@ def enrich_saved_screen(output_dir, *, offline=False, now=None):
 def render_saved_outputs(output_dir):
     """The PM notes and dashboard are views of saved outputs, never a second source of numbers."""
     write_pm_note(output_dir)
-    (output_dir / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
+    deliverable_file(output_dir, "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
     write_dashboard(output_dir)
 
 
-SNAPSHOT_FILES = [
+SNAPSHOT_FILES = [f"{DELIVERABLES_DIR}/{name}" for name in [
+    "dashboard.html", "current_thursday_screen.md", "pm_note_screen.md", "pm_note_portfolio_alert.md",
+    "historical_summary.md",
+]] + [f"{DATA_DIR}/{name}" for name in [
     "context_metadata.json", "current_screen_context.csv", "current_screen_context.md",
-    "current_thursday_candidates_audit.csv", "current_thursday_screen.csv", "current_thursday_screen.md",
-    "dashboard.html", "feature_exclusions.csv", "friday_outcomes.csv", "historical_summary.md",
-    "historical_thursday_screens.csv", "lean_buckets.csv", "lean_sanity.csv", "outcome_summary.csv",
-    "pm_note_portfolio_alert.md", "pm_note_screen.md", "run_metadata.json", "thursday_audit.csv",
-    "universe_snapshot.csv",
-]
+    "current_thursday_candidates_audit.csv", "current_thursday_screen.csv", "feature_exclusions.csv",
+    "friday_outcomes.csv", "historical_thursday_screens.csv", "lean_buckets.csv", "lean_sanity.csv",
+    "outcome_summary.csv", "run_metadata.json", "thursday_audit.csv", "universe_snapshot.csv",
+]]
 
 
 def archive_current_run(output_dir):
     """Keep a dated copy of the completed run; an existing dated copy is never overwritten."""
-    metadata_path = output_dir / "run_metadata.json"
+    metadata_path = data_file(output_dir, "run_metadata.json")
     metadata = json.loads(metadata_path.read_text())
     dated = output_dir / "runs" / metadata["decision_date"]
-    if (dated / "run_metadata.json").exists():
-        existing = json.loads((dated / "run_metadata.json").read_text())
-        history = dated / "historical_thursday_screens.csv"
+    if (dated / DATA_DIR / "run_metadata.json").exists():
+        existing = json.loads((dated / DATA_DIR / "run_metadata.json").read_text())
+        history = dated / DATA_DIR / "historical_thursday_screens.csv"
         if hashlib.sha256(history.read_bytes()).hexdigest() != existing["thursday_decisions_sha256"]:
             raise ValueError(f"Existing dated run failed its decision hash: {dated}")
         if metadata["thursday_decisions_sha256"] == existing["thursday_decisions_sha256"]:
@@ -240,9 +242,9 @@ def archive_current_run(output_dir):
                   f"{output_dir}.", file=sys.stderr)
         metadata_path.write_text(json.dumps(dict(metadata, archive_status=status), indent=2))
         return dated
-    dated.mkdir(parents=True, exist_ok=True)
     for name in SNAPSHOT_FILES:
         source = output_dir / name
         if source.exists():
+            (dated / name).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, dated / name)
     return dated

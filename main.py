@@ -5,7 +5,7 @@ import sys
 
 from config import MONTHS
 from src.pipeline import run_research
-from src.report import PORTFOLIO_NOTE
+from src.report import PORTFOLIO_NOTE, deliverable_file
 
 
 def parse_args():
@@ -26,7 +26,7 @@ def record_failure(args, error):
     output_dir.mkdir(parents=True, exist_ok=True)
     message = f"{type(error).__name__}: {error}\nRun failed; existing outputs may belong to an older run.\n"
     (output_dir / "RUN_FAILED.txt").write_text(message)
-    (output_dir / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
+    deliverable_file(output_dir, "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
     print(message, file=sys.stderr)
 
 

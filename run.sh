@@ -10,7 +10,7 @@ usage() {
   echo "  replay     Rebuild the submitted 24 September screen from the committed frozen fixture"
   echo "  test       Run the complete deterministic test suite"
   echo "  integration Run the slower frozen end-to-end contract"
-  echo "  dashboard  Optional: serve outputs/dashboard.html locally (it also opens directly from disk)"
+  echo "  dashboard  Optional: serve outputs/deliverables/dashboard.html locally (it also opens directly from disk)"
   echo "  setup      Create the virtual environment and install dependencies"
 }
 
@@ -27,7 +27,7 @@ open_dashboard() {
   "$PYTHON" -m webbrowser "http://127.0.0.1:${port}/dashboard.html" >/dev/null 2>&1 &
   echo "Dashboard: http://127.0.0.1:${port}/dashboard.html"
   echo "Press Ctrl-C to stop."
-  exec "$PYTHON" -m http.server "$port" --directory "$ROOT/outputs"
+  exec "$PYTHON" -m http.server "$port" --directory "$ROOT/outputs/deliverables"
 }
 
 cd "$ROOT"

@@ -4,7 +4,7 @@
 
 Run UTC: 2026-09-25T18:01:35.742155+00:00; market time zone America/New_York. Data observed: 2026-09-25T18:01:36.209495+00:00; latest completed SPY bar: 2026-09-24.
 
-Returns and percentiles are fractions; scores are 0–100, RVOL/compression are ratios. CSV retains full precision. Lean is a heuristic, not a probability.
+Returns and percentiles are fractions; scores are 0–100, RVOL/compression are ratios. data/current_thursday_screen.csv retains full precision. Lean is a heuristic, not a probability.
 
 | ticker | stock_impulse_return | excess_return | rvol | compression_ratio | excess_return_percentile | rvol_percentile | excitement_score | retention | close_location | consolidation_rs_percentile | lean_score | lean | reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
