@@ -53,20 +53,9 @@ def markdown_table(frame):
                       ["| " + " | ".join(display(x) for x in r) + " |" for r in frame.itertuples(index=False, name=None)])
 
 
-def write_screen(out, screen, candidates, date, label, meta):
+def write_screen(out, screen, candidates):
     screen.to_csv(data_file(out, "current_thursday_screen.csv"), index=False)
     candidates.to_csv(data_file(out, "current_thursday_candidates_audit.csv"), index=False)
-    cols = ["ticker", "stock_impulse_return", "excess_return", "rvol", "compression_ratio",
-            "excess_return_percentile", "rvol_percentile", "excitement_score", "retention", "close_location",
-            "consolidation_rs_percentile", "lean_score", "lean", "reason"]
-    deliverable_file(out, "current_thursday_screen.md").write_text(
-        f"# {date.date()}: {label}\n\n{len(candidates)} qualifying; {len(screen)} displayed, "
-        f"{int((~candidates.scorable.astype(bool)).sum())} qualifying but unscorable.\n\n"
-        f"Run UTC: {meta['run_at_utc']}; market time zone America/New_York. "
-        f"Data observed: {meta['data_observed_at_utc']}; latest completed SPY bar: {meta['data_as_of']}.\n\n"
-        "Returns and percentiles are fractions; scores are 0–100, RVOL/compression are ratios. "
-        "data/current_thursday_screen.csv retains full precision. Lean is a heuristic, not a probability.\n\n" +
-        markdown_table(screen[[c for c in cols if c in screen]]) + "\n")
 
 
 def load_saved_outputs(out):
@@ -102,6 +91,51 @@ def lean_phrase(row):
 
 def pct(x, signed=False):
     return "n/a" if pd.isna(x) else f"{x:+.2%}" if signed else f"{x:.1%}"
+
+
+def plain_reason(row):
+    """Plain-English read of the lean inputs, built from saved values; wording only, no new rule."""
+    if pd.isna(row.retention):
+        return "Qualifies, but has no lean: the impulse never traded above its starting close."
+    kept = row.retention_raw
+    if kept > 1:
+        held = "Pushed above its impulse high (retention capped at 100%)"
+    elif kept < 0:
+        held = "Fell below where the impulse started (retention floored at 0%)"
+    elif kept >= 0.9:
+        held = f"Held nearly all of its move ({kept:.0%})"
+    elif kept >= 0.6:
+        held = f"Held most of its move ({kept:.0%})"
+    elif kept >= 0.4:
+        held = f"Held about half of its move ({kept:.0%})"
+    else:
+        held = f"Gave back most of its move (kept {kept:.0%})"
+    where = ("near the top" if row.close_location >= 0.75 else
+             "near the bottom" if row.close_location <= 0.25 else "in the middle")
+    joiner = "and" if (row.retention >= 0.5) == (row.close_location >= 0.5) else "but"
+    versus = "beat" if row.consolidation_rs > 0 else "lagged" if row.consolidation_rs < 0 else "matched"
+    return (f"{held} {joiner} closed {where} of its three-day range ({row.close_location:.0%}); {versus} SPY "
+            f"during a pause {1 - row.compression_ratio:.0%} tighter than its usual range.")
+
+
+def write_screen_md(out):
+    """Readable Thursday list: rule numbers, lean and a plain-English read. Every audit field stays in data/."""
+    v = load_saved_outputs(out)
+    meta, screen, candidates = v["meta"], v["screen"], v["candidates"]
+    rows = ["| Ticker | Impulse vs SPY | RVOL | Compression | Excitement | Lean score | Read |",
+            "| --- | ---: | ---: | ---: | ---: | --- | --- |"]
+    for r in screen.itertuples():
+        rows.append(f"| {r.ticker} | {pct(r.excess_return, True)} | {r.rvol:.2f}× | {r.compression_ratio:.2f} | "
+                    f"{r.excitement_score:.1f} | {r.lean_score:.1f}: {lean_phrase(r)} | {plain_reason(r)} |")
+    unscorable = int((~candidates.scorable.astype(bool)).sum()) if len(candidates) else 0
+    text = (f"# Thursday {meta['decision_date']}: {meta['snapshot_label']}\n\n"
+            f"{len(candidates)} qualifying; {len(screen)} displayed; {unscorable} qualifying without a lean. "
+            f"Data observed {meta['data_observed_at_utc']}; latest completed SPY bar {meta['data_as_of']}.\n\n"
+            + ("\n".join(rows) if len(screen) else "No qualifying names.") + "\n\n"
+            "Qualification: impulse vs SPY > 0, RVOL > 1 and compression < 1, all strict; excitement orders the list. "
+            "The lean is a heuristic, not a probability. Full precision, the three lean inputs and every audit field "
+            "are in data/current_thursday_screen.csv; definitions are in README.md and formulas in RESEARCH_SPEC.md.\n")
+    deliverable_file(out, "current_thursday_screen.md").write_text(text)
 
 
 def completed_fridays(audit):
@@ -141,20 +175,22 @@ def write_pm_note(out):
         "with the most unusual move plus volume are below.",
         f"Continuation leans, strongest first (lean score, 50 = balanced): {names(cont)}.",
         f"Stall leans, strongest first: {names(stall)}{weak_text}{balanced_text}.",
-        "Why: the lean averages how much of the impulse was kept, where Thursday closed in its three-day range, "
-        f"and pause strength vs SPY; {why}",
+        "Why: the lean averages how much of the move each stock kept, where Thursday closed in its three-day "
+        f"range, and how it did against SPY during the pause; {why}",
         sector_text,
         f"History ({completed_fridays(v['audit'])} completed Fridays, {int(v['summary'].loc['pm_top10', 'n'])} "
         f"displayed names): higher leans closed above the range {pct(hi.continuation_rate)} vs "
         f"{pct(lo.continuation_rate)} for lower leans, but stalled {pct(hi.stall_rate)} vs {pct(lo.stall_rate)}, "
-        f"with mean Friday return vs SPY {pct(hi.friday_excess_mean, True)} vs {pct(lo.friday_excess_mean, True)}: "
-        "no demonstrated return edge.",
+        f"with mean Friday return vs SPY {pct(hi.friday_excess_mean, True)} vs {pct(lo.friday_excess_mean, True)}; "
+        "descriptive for this sample only, not evidence of a tradable edge.",
         "It sees only daily price and volume: no news, catalysts, options or order flow, or intraday path; history "
         "uses today's S&P 500 members; the lean is a heuristic, not a probability.",
-        "Next test: on the next ten prospectively saved Thursdays, check whether the lean still separates Friday "
-        "stalls or returns vs SPY once close location, which mechanically favours breakouts, is removed.",
+        "Next test, fixed in advance: on the next 10 saved Thursday lists, compare leans above vs below 50 Friday by "
+        "Friday; keep going only if the breakout gap persists and higher leans also stall less and beat SPY on "
+        "most of those Fridays.",
     ]
-    assert len(lines) == 8 and all(lines)
+    if len(lines) != 8 or not all(lines):
+        raise RuntimeError("The PM note must be exactly eight non-empty lines")
     deliverable_file(out, "pm_note_screen.md").write_text("\n".join(lines) + "\n")
 
 

@@ -11,7 +11,7 @@ usage() {
   echo "  test       Run the complete deterministic test suite"
   echo "  integration Run the slower frozen end-to-end contract"
   echo "  dashboard  Optional: serve outputs/deliverables/dashboard.html locally (it also opens directly from disk)"
-  echo "  setup      Create the virtual environment and install dependencies"
+  echo "  setup      Create the virtual environment and install the locked dependencies"
 }
 
 require_environment() {
@@ -34,7 +34,7 @@ cd "$ROOT"
 case "${1:-}" in
   setup)
     python3 -m venv .venv
-    "$PYTHON" -m pip install -r requirements.txt
+    "$PYTHON" -m pip install -r requirements-lock.txt
     ;;
   fresh)
     require_environment

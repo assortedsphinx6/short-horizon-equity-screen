@@ -8,6 +8,9 @@ import unittest
 
 import pandas as pd
 
+from types import SimpleNamespace
+
+from main import record_failure
 from src.pipeline import SNAPSHOT_FILES, archive_current_run
 
 
@@ -68,6 +71,21 @@ class DatedArchiveTests(unittest.TestCase):
             fh.write("tampered\n")
         with self.assertRaisesRegex(ValueError, "failed its decision hash"):
             archive_current_run(self.out)
+
+
+
+class FailureReportTests(unittest.TestCase):
+    def test_failure_report_has_traceback_and_leaves_deliverables_alone(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            try:
+                raise RuntimeError("Yahoo SPY download failed")
+            except RuntimeError as error:
+                record_failure(SimpleNamespace(output_dir=str(out)), error)
+            report = (out / "RUN_FAILED.txt").read_text()
+            self.assertIn("RuntimeError: Yahoo SPY download failed", report)
+            self.assertIn("Traceback (most recent call last)", report)
+            self.assertFalse((out / "deliverables").exists())
 
 
 if __name__ == "__main__":

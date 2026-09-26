@@ -2,10 +2,10 @@
 import argparse
 from pathlib import Path
 import sys
+import traceback
 
 from config import MONTHS
 from src.pipeline import run_research
-from src.report import PORTFOLIO_NOTE, deliverable_file
 
 
 def parse_args():
@@ -24,9 +24,9 @@ def parse_args():
 def record_failure(args, error):
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    message = f"{type(error).__name__}: {error}\nRun failed; existing outputs may belong to an older run.\n"
+    message = (f"{type(error).__name__}: {error}\nRun failed; existing outputs may belong to an older run.\n\n"
+               + "".join(traceback.format_exception(error)))
     (output_dir / "RUN_FAILED.txt").write_text(message)
-    deliverable_file(output_dir, "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
     print(message, file=sys.stderr)
 
 

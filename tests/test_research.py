@@ -1,10 +1,12 @@
 """Synthetic calculation fixtures only; never used as empirical research output."""
 import unittest
+from unittest.mock import patch
 import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 from src.data import schedule
-from src.features import build_features
+from src.features import ThursdayUnavailable, build_features
+import src.features as features
 from src.screen import rank_and_screen
 from src.evaluate import evaluate, classify, session_status, summary_tables
 
@@ -74,6 +76,36 @@ class ResearchTests(unittest.TestCase):
                             for j in range(3, 21)])
         self.assertGreater(abs(own - shared) / own, .5)
         self.assertAlmostEqual(build_features(p, ["A"], t, cal)[0].iloc[0].normal_range, own, places=14)
+
+    def test_baseline_range_width_follows_the_consolidation_setting(self):
+        p, cal, t = fixture()
+        with patch.object(features, "CONSOLIDATION", 2):
+            row = build_features(p, ["A"], t, cal)[0].iloc[0]
+            w = p["A"].iloc[-28:]  # 20 baseline + 5 impulse + 2 pause + preceding close
+            k = 2
+            expected = np.median([(w.high.iloc[j-k+1:j+1].max() - w.low.iloc[j-k+1:j+1].min()) / w.close.iloc[j-k]
+                                  for j in range(k, 21)])
+        self.assertAlmostEqual(row.normal_range, expected, places=14)
+        width = w.high.iloc[-2:].max() - w.low.iloc[-2:].min()
+        self.assertAlmostEqual(row.current_range, width / w.close.iloc[-3], places=14)
+
+    def test_duplicate_date_excludes_only_that_ticker_but_fails_for_spy(self):
+        p, cal, t = fixture()
+        p["A"] = pd.concat([p["A"], p["A"].iloc[[10]]])
+        features_, excluded = build_features(p, ["A", "B"], t, cal)
+        self.assertEqual(features_.ticker.tolist(), ["B"])
+        self.assertEqual(excluded.set_index("ticker").loc["A", "reason"], "duplicate_dates")
+        p, cal, t = fixture()
+        p["SPY"] = pd.concat([p["SPY"], p["SPY"].iloc[[10]]])
+        with self.assertRaisesRegex(ValueError, "Duplicate SPY dates") as caught:
+            build_features(p, ["A"], t, cal)
+        self.assertNotIsInstance(caught.exception, ThursdayUnavailable)
+
+    def test_missing_warm_up_is_an_expected_unavailable_thursday(self):
+        p, cal, t = fixture()
+        short = {k: v.iloc[5:] for k, v in p.items()}
+        with self.assertRaises(ThursdayUnavailable):
+            build_features(short, ["A"], t, cal)
 
     def test_friday_cannot_change_any_thursday_decision(self):
         p, cal, t = fixture()

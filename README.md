@@ -4,12 +4,14 @@ A small, reproducible price/volume screen that turns the PM's "excitement, a few
 
 The assignment is in [task.md](task.md). Exact formulas, data handling and the outcome protocol are in [RESEARCH_SPEC.md](RESEARCH_SPEC.md); this README is the operating guide.
 
+**Scope.** The core screen, its definitions and the historical Friday check were built to the take-home scope. With the extension, I used the extra time for optional SEC context, reproducibility hardening (frozen fixture, clock-independent replay, dated archives), testing and presentation. SEC enrichment is context only and never affects qualification, excitement, lean or Friday labels.
+
 ## Quick start
 
 Requires Python 3.11+ and `bash`. No credentials.
 
 ```sh
-./run.sh setup     # create .venv and install requirements.txt (network: PyPI)
+./run.sh setup     # create .venv and install the locked versions in requirements-lock.txt (network: PyPI)
 ./run.sh test      # fast correctness suite, offline, about 15 seconds
 ./run.sh replay    # reproduce the submitted 24 September screen offline, about 2 minutes
 ```
@@ -33,7 +35,7 @@ outputs/
 
 The other files in `outputs/deliverables/`:
 
-- `current_thursday_screen.md`: the Thursday list with every rule input, lean and one-line reason.
+- `current_thursday_screen.md`: the Thursday list with the numbers behind each rule, the lean and a plain-English reason.
 - `pm_note_screen.md`: the eight-line note to the PM.
 - `pm_note_portfolio_alert.md`: the half-page portfolio-alert proposal.
 - `historical_summary.md`: what happened on past Fridays, with every denominator.
@@ -46,7 +48,7 @@ The other files in `outputs/deliverables/`:
 
 | Action | Command | Data / network | Writes to | Effect on saved results |
 | --- | --- | --- | --- | --- |
-| Install | `./run.sh setup` | PyPI | `.venv/` | None |
+| Install | `./run.sh setup` | PyPI; exact versions from `requirements-lock.txt` | `.venv/` | None |
 | Fast tests | `./run.sh test` | Offline; committed outputs and synthetic fixtures | Temporary folders only | None. The slow integration test is skipped here |
 | Frozen end-to-end test | `./run.sh integration` | Offline; committed fixture | Temporary folder | None. Checks the 503 → 502 → 65 → 10 funnel, ticker order and decision hash |
 | Reproduce the submission | `./run.sh replay` | Offline; always `fixtures/frozen_2026-09-24/` | `outputs/replay/` (ignored by Git) | None: `outputs/deliverables/`, `outputs/data/` and the dated archive are untouched |
@@ -59,15 +61,15 @@ Advanced `main.py` options, run as `.venv/bin/python main.py …`:
 - `--render-only` rebuilds the PM notes and dashboard from the saved files in `--output-dir` (default `outputs/`) without any download.
 - `--enrich-only` refreshes only the optional SEC context for the saved screen; it never changes a signal.
 
-Tested on Python 3.11.4 (exact environment in `requirements-lock.txt`) and in a clean clone on Python 3.13.
+`setup` installs the exact package versions in `requirements-lock.txt`, recorded on Python 3.11.4 and verified to install on Python 3.13. `requirements.txt` lists only the direct dependencies with version ranges, for other environments; different package versions can change the last floating-point digit of some summary CSVs.
 
 ## Replay versus fresh
 
 **`./run.sh replay`** reproduces the submitted point-in-time snapshot.
 
 - It always reads the committed input vintage in `fixtures/frozen_2026-09-24/`, whatever a previous `fresh` run left in `cache/`.
-- It is deterministic: the screen, candidate audit and historical study are byte-identical to the committed outputs, with the same decision hash.
-- It keeps the saved observation time (25 September 2026, 14:01 New York). Friday 25 September had not closed at that time, so that week's Friday outcome is `pending` (see below).
+- It uses the fixture's recorded observation time (25 September 2026, 14:01 New York) for every date window, the decision Thursday and every completeness check, never your computer's clock, so it gives the same result months later. Friday 25 September had not closed at that time, so that week's Friday outcome is `pending` (see below).
+- With the locked environment it is deterministic: the screen, candidate audit, rank population, historical decisions, Friday outcomes and all five deliverables are byte-identical to the committed outputs, with the same decision hash. The three summary tables (`outcome_summary.csv`, `lean_buckets.csv`, `lean_sanity.csv`) agree to about 1e-16, because the committed ones were computed from the live download before it was saved as the fixture; `run_metadata.json` and the SEC files also record when the replay ran.
 - The optional SEC response cache is not committed, so replay marks SEC context `unavailable` rather than inventing a "no filing" result.
 
 **`./run.sh fresh`** runs the screen on today's public data.
@@ -143,7 +145,7 @@ The observation time is frozen before any download, and a bar only counts once i
 5. **Lean and its inputs:** retention, close location and pause relative-strength percentile. Scores close to 50 carry little direction.
 6. **Evidence and SEC context:** past-Friday rates for higher vs lower leans, and the optional filing check.
 
-`outputs/deliverables/current_thursday_screen.md` (readable) and `outputs/data/current_thursday_screen.csv` (full precision) contain the same rows:
+`outputs/deliverables/current_thursday_screen.md` shows the list with the numbers behind each rule, the lean score and a plain-English reason. `outputs/data/current_thursday_screen.csv` has the same rows at full precision with every field:
 
 | Column | Meaning |
 | --- | --- |
@@ -153,7 +155,7 @@ The observation time is frozen before any download, and a bar only counts once i
 | `excess_return_percentile`, `rvol_percentile`, `excitement_score` | Cross-sectional ranks and their average (0–100); sets the display order |
 | `retention`, `close_location`, `consolidation_rs_percentile` | The three lean inputs, each 0–1 |
 | `lean_score`, `lean` | 0–100 score and its label; distance from 50 is the strength, so 49 or 51 is near neutral |
-| `reason` | One line built from the numbers above |
+| `reason` | A numeric audit line built from the numbers above; the deliverables show a plain-English version of the same values |
 
 ## Submitted snapshot: Thursday 24 September 2026
 
@@ -185,7 +187,7 @@ The same fixed rules were rerun on every Thursday from 25 September 2025 to 24 S
 | All qualifiers | 2,448 | 16.7% | 35.2% | 48.1% | +0.03% |
 | Displayed top 10 each week | 460 | 18.7% | 34.1% | 47.2% | −0.03% |
 
-- Higher leans closed above the range far more often than lower leans (all qualifiers 25.3% vs 8.1%; top 10 25.6% vs 8.6%), but they **did not stall less** (all qualifiers 47.8% vs 48.4%; top 10 49.1% vs 44.4%) and there is **no demonstrated return edge**.
+- Higher leans closed above the range far more often than lower leans (all qualifiers 25.3% vs 8.1%; top 10 25.6% vs 8.6%), but they **did not stall less** (all qualifiers 47.8% vs 48.4%; top 10 49.1% vs 44.4%), and this sample shows **no return edge**.
 - Part of the breakout gap is mechanical: a Thursday close near the top of the range is already close to the breakout line.
 - The 2,448 completed candidate events are clustered across only 46 completed Fridays, and names on the same Friday are correlated, so they should not be read as thousands of independent observations. No significance is claimed, and no costs, sizing or P&L are modelled.
 
@@ -195,13 +197,13 @@ Exact denominators, lean buckets and exclusions are in `outputs/deliverables/his
 
 - *Look-ahead:* every feature and rank uses data up to Thursday only. A bar counts only after its scheduled NYSE close relative to a timestamp frozen before download. Friday data is joined in a separate step after the Thursday decisions are written. Tests mutate or delete all post-Thursday data and check that nothing changes.
 - *Survivorship:* today's S&P 500 membership is projected backward, which drops deletions and includes additions before they joined.
-- *Thresholds fitted to the answer:* the thresholds are fixed constants in `config.py`, applied unchanged to every Thursday, and the code performs no parameter search. The repository history cannot prove when they were chosen, so treat the evidence as descriptive, not as out-of-sample validation.
+- *Thresholds fitted to the answer:* the thresholds are fixed constants in `config.py`, applied unchanged to every Thursday, and the code performs no parameter search; the values are unchanged since the screen's first commit. That history cannot prove when they were chosen, so treat the evidence as descriptive, not as out-of-sample validation.
 
-**What free data cannot test, and how to test it with the right data.** Daily Yahoo bars cannot show news or social attention, options activity, true order flow, the intraday path on Friday, or the data exactly as it looked on Thursday night. With point-in-time index membership, archived as-of-Thursday bars, timestamped news or social volume, options volume, and intraday Friday bars, the same rules could be re-tested without survivorship, with direct attention measures, and with a tradable Friday entry. The cheapest next step is prospective: save each Thursday's list before Friday and evaluate unchanged rules on those held-out Fridays. A comparison against non-qualifying stocks on the same Fridays would also be a natural extension.
+**What free data cannot test, and how to test it with the right data.** Daily Yahoo bars cannot show news or social attention, options activity, true order flow, the intraday path on Friday, or the data exactly as it looked on Thursday night. With point-in-time index membership, archived as-of-Thursday bars, timestamped news or social volume, options volume, and intraday Friday bars, the same rules could be re-tested without survivorship, with direct attention measures, and with a tradable Friday entry. The cheapest next step is prospective and fixed in advance: on the next 10 saved Thursday lists, compare leans above vs below 50 Friday by Friday on breakout rate, stall rate and mean return vs SPY, and keep investigating only if the breakout gap persists and higher leans also stall less and beat SPY on most of those Fridays.
 
 ## Optional SEC context
 
-After the Yahoo screen is complete, the displayed names get a separate SEC EDGAR lookup: target forms (8-K, 10-Q, 10-K, 6-K, 20-F and amendments) accepted between impulse start and Thursday 20:00 New York time, capped at the data observation time. It answers "did a filing coincide with this move?" and **never** affects qualification, excitement, lean or Friday labels. If SEC fails, the screen still completes.
+After the Yahoo screen is complete, the displayed names get a separate SEC EDGAR lookup: target forms (8-K, 10-Q, 10-K, 6-K, 20-F and amendments) accepted between impulse start and Thursday 20:00 New York time, capped at the data observation time. It answers "did a filing coincide with this move?" and **never** affects qualification, excitement, lean or Friday labels. If SEC fails, the screen still completes. It was added with extension time, after the core screen.
 
 | `sec_status` | Meaning |
 | --- | --- |
@@ -239,14 +241,25 @@ A failed core run writes `outputs/RUN_FAILED.txt`; a failed SEC step writes `out
 
 Code: `main.py` (command line), `src/pipeline.py` (steps in order), `data.py`, `features.py`, `screen.py`, `evaluate.py`, `report.py`, `dashboard.py`, `enrichment.py`; constants in `config.py`. Tests in `tests/` use synthetic fixtures, an independent numpy oracle for the frozen 24 September screen, and checks on the saved outputs.
 
-## Limitations
+## Limitations, design choices, and next tests
 
-- Current S&P 500 membership is projected backward (survivorship bias).
-- Yahoo adjusted data is downloaded after the fact and revised over time; it is not an archived Thursday-night vintage.
-- Windows containing a reported split are excluded, which cannot catch every vendor error.
-- Historical events are clustered across 46 completed Fridays and correlated within each Friday.
-- No news, social attention, options, order flow, intraday path, costs, borrow or portfolio data.
-- The lean is a heuristic, not a calibrated probability; there is no demonstrated persistent edge.
-- The 5/3/20 windows, top 10 and 50 midpoint are defensible conventions, not optimized or validated values.
+These are deliberate scope choices or known limits of free daily data. None was tuned after seeing Friday outcomes: every value in `config.py` is unchanged since the screen's first commit (`git log -p config.py`), though that history cannot prove the values were chosen before any outcome was seen.
 
-AI use: I used AI-assisted tools to accelerate implementation, testing, and documentation; I selected the methodology and reviewed the resulting definitions and outputs.
+| Choice or limitation | What it means here | What a longer project would test |
+| --- | --- | --- |
+| Upside reading of a long/short book | "Excited" and "goes again" are read as an upside setup. A `stall` lean is not a short signal. | A mirror short-side screen: unusually weak relative performance on elevated volume, a pause after the selloff, and downside continuation labels. |
+| RVOL > 1 is a permissive floor | It filters little in broad high-volume weeks (481 of 502 on 24 September); the RVOL percentile inside excitement does most of the differentiation. | Pre-registered alternative participation floors or volume-rank cutoffs, fixed before looking at outcomes. |
+| Relative entry can include absolute losers | The impulse gate is SPY-relative, so a stock that fell less than SPY qualifies. This is intentional under the market-relative reading. | Adding a positive-absolute-return requirement if the PM means absolute upside only. |
+| Relative entry, absolute Friday labels | Entry is measured against SPY, but continuation and stall use the stock's own chart ("goes again" / "stalls"), so a broad market move on Friday can drive the label. | Report absolute, SPY-relative and same-Friday base-rate outcomes side by side. |
+| `stall` mixes several outcomes | Any Friday close at or below Thursday's close counts, so failed continuation, mild weakness and a true breakdown share one label. | Split stall into flat, soft and range-breakdown states. |
+| 50 as the lean midpoint | Each input has a natural middle: about half the move kept, a close mid-range, median relative strength among peers. Their equal-weight average therefore uses 50 as a transparent midpoint. It is not a calibrated probability. | Calibrate the lean against outcomes on data it was not built on. |
+| Dependent observations | 2,448 completed name-events fall on only 46 Fridays, and names on one Friday move together, so they are not thousands of independent experiments. Results are descriptive. | Summarize by Friday, and use date-level or block-bootstrap inference if significance is needed. |
+| No non-qualifier or market base rate | Outcomes are compared within qualifiers and across lean groups only. The study does not show whether qualifiers beat non-qualifying S&P names or a same-Friday market baseline. | Compare qualifiers with non-qualifiers and with a same-Friday baseline. |
+| Current-membership survivorship | History reuses today's S&P 500 constituents, which drops deletions and includes additions before they joined. | Point-in-time index membership. |
+| Yahoo data vintage | Yahoo revises adjusted history, and split handling cannot catch every vendor error. The frozen fixture protects the submitted vintage. | Point-in-time vendor data, immutable daily snapshots and an explicit corporate-action history. |
+| Attention is a proxy | "Excitement" is observed from market behavior: performance vs SPY plus unusual volume. News, social attention, options flow, order flow and the intraday path are not measured. | Test whether direct attention data improves the proxy. |
+| The lean is a heuristic | In this sample higher leans broke above the range more often (25.6% vs 8.6% for the displayed names) but did not stall less (49.1% vs 44.4%) and showed no persistent excess-return edge. | The pre-registered test in the PM note, on the next 10 saved Thursday lists. |
+| Conventions, not optimized values | The 5/3/20 windows, compression rule, top-10 display and equal weights make the PM's words executable; they are not claimed to be optimal. | Pre-register alternatives before evaluating them prospectively. |
+| SEC is context only | Filing-time aware, isolated from failures, and never used for qualification, excitement, lean or Friday labels. It was added with extension time after the core screen. | Richer event context, for example an earnings calendar, still kept outside the signal. |
+
+AI use: I used ChatGPT, Claude, and Codex to assist with implementation, testing, documentation, and independent review; I selected the methodology, made the final research decisions, and validated the submitted outputs.

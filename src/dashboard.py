@@ -3,7 +3,7 @@ from html import escape
 
 import pandas as pd
 
-from src.report import completed_fridays, deliverable_file, lean_phrase, load_saved_outputs, pct
+from src.report import completed_fridays, deliverable_file, lean_phrase, load_saved_outputs, pct, plain_reason
 
 STYLE = """
 :root{--ink:#172235;--muted:#5d6b82;--line:#dce3ec;--paper:#f4f7fb;--card:#fff;--navy:#0d1c31;
@@ -103,7 +103,7 @@ def signal_row(r, v):
         f"<td>{r.rvol:.2f}×</td><td>{r.compression_ratio:.2f}</td>"
         f"<td class='small'>kept {r.retention:.0%} of move<br>closed at {r.close_location:.0%} of range<br>"
         f"pause RS percentile {r.consolidation_rs_percentile:.0%}</td>"
-        f"<td class='small'>{escape(str(r.reason))}</td><td class='small'>{sec_text(v['context'], r.ticker)}</td></tr>")
+        f"<td class='small'>{escape(plain_reason(r))}</td><td class='small'>{sec_text(v['context'], r.ticker)}</td></tr>")
 
 
 def evidence_panel(v, population, title):

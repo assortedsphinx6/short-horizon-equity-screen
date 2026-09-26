@@ -15,17 +15,17 @@ from src.dashboard import write_dashboard
 from src.data import download, load_cache, save_cache, schedule, universe
 from src.enrichment import enrich_shortlist
 from src.evaluate import evaluate, session_status, summary_tables
-from src.features import build_features
+from src.features import ThursdayUnavailable, build_features
 from src.report import (DATA_DIR, DELIVERABLES_DIR, PORTFOLIO_NOTE, data_file, deliverable_file, markdown_table,
-                        write_history, write_pm_note, write_screen)
+                        write_history, write_pm_note, write_screen, write_screen_md)
 from src.screen import rank_and_screen
 
 PACKAGE_NAMES = ["pandas", "numpy", "yfinance", "requests", "lxml", "pandas_market_calendars"]
 
 
-def run_research(args):
+def run_research(args, now=None):
     """Build the current screen, historical evidence, and optional context."""
-    now = pd.Timestamp.now(tz="UTC")
+    now = pd.Timestamp.now(tz="UTC") if now is None else now
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     if args.render_only:
@@ -36,7 +36,10 @@ def run_research(args):
         render_saved_outputs(output_dir)
         return
 
-    today = now.tz_convert("America/New_York").normalize().tz_localize(None)
+    # A replay sets every date window and completeness check from the fixture's frozen observation time,
+    # so the same fixture gives the same result on any later day. Live runs use the real clock.
+    clock = replay_observation_time(args.cache_dir) if args.replay else now
+    today = clock.tz_convert("America/New_York").normalize().tz_localize(None)
     anchor, start = validate_requested_period(args, today)
     calendar = schedule(start, today + pd.Timedelta(days=8))
     prices, members, metadata, observed_at = load_market_inputs(args, now, today, start)
@@ -52,6 +55,10 @@ def run_research(args):
     enrich_saved_screen(output_dir, offline=args.replay, now=now)
     render_saved_outputs(output_dir)
     archive_current_run(output_dir)
+
+
+def replay_observation_time(cache_dir):
+    return pd.Timestamp(json.loads((Path(cache_dir) / "manifest.json").read_text())["data_observed_at_utc"])
 
 
 def validate_requested_period(args, today):
@@ -124,7 +131,7 @@ def choose_decision_date(args, anchor, prices, calendar, observed_at):
 def build_current_screen(prices, members, decision, calendar, metadata, output_dir):
     features, _ = build_features(prices, members.ticker, decision, calendar)
     screen, candidates, _ = rank_and_screen(features)
-    write_screen(output_dir, screen, candidates, decision, metadata["snapshot_label"], metadata)
+    write_screen(output_dir, screen, candidates)
     print(f"{decision.date()}: {len(features)} valid stocks, {len(candidates)} qualifiers, {len(screen)} displayed")
     return screen
 
@@ -137,15 +144,15 @@ def build_historical_study(prices, members, decision, calendar, observed_at, mon
                       pm_visible_count=0, friday_status=session_status(date, calendar, observed_at), exclusion="")
         try:
             if date not in calendar.index:
-                raise ValueError("Thursday holiday")
+                raise ThursdayUnavailable("Thursday holiday")
             if calendar.loc[date, "market_close"] > observed_at:
-                raise ValueError("Thursday not completed at data observation")
+                raise ThursdayUnavailable("Thursday not completed at data observation")
             features, excluded = build_features(prices, members.ticker, date, calendar)
             _, qualified, valid = rank_and_screen(features)
             decisions.append(qualified); universes.append(valid); exclusions.append(excluded)
             record.update(scanned=True, eligible_universe_count=len(features), qualified_count=len(qualified),
                           pm_visible_count=int(qualified.pm_visible.sum()))
-        except ValueError as exc:
+        except ThursdayUnavailable as exc:
             record["exclusion"] = str(exc)
         audit.append(record)
     return dict(decisions=pd.concat(decisions, ignore_index=True), universes=pd.concat(universes, ignore_index=True),
@@ -207,6 +214,7 @@ def enrich_saved_screen(output_dir, *, offline=False, now=None):
 def render_saved_outputs(output_dir):
     """The PM notes and dashboard are views of saved outputs, never a second source of numbers."""
     write_pm_note(output_dir)
+    write_screen_md(output_dir)
     deliverable_file(output_dir, "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
     write_dashboard(output_dir)
 

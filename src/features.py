@@ -5,19 +5,25 @@ from config import BASELINE, CONSOLIDATION, IMPULSE, BENCHMARK
 from src.data import invalid_bars
 
 
+class ThursdayUnavailable(ValueError):
+    """Expected condition: the Thursday has no complete benchmark session window, so it cannot be screened."""
+
+
 def build_features(prices, tickers, as_of, calendar):
     t = pd.Timestamp(as_of)
     if t.weekday() != 3:
         raise ValueError("Decision date must be Thursday")
     spy = prices[BENCHMARK].sort_index().loc[:t]
+    if spy.index.duplicated().any():
+        raise ValueError("Duplicate SPY dates: benchmark data cannot be trusted")
     if spy.empty or spy.index[-1] != t:
-        raise ValueError("Thursday SPY bar missing")
+        raise ThursdayUnavailable("Thursday SPY bar missing")
     # 29 observations: preceding close + 20 baseline + 5 impulse + 3 pause.
     n = BASELINE + IMPULSE + CONSOLIDATION + 1
     sessions = spy.index[-n:]
     expected = calendar.loc[:t].index[-n:]
     if len(sessions) != n or not sessions.equals(expected):
-        raise ValueError("Incomplete SPY session index / warm-up")
+        raise ThursdayUnavailable("Incomplete SPY session index / warm-up")
     b = spy.reindex(sessions)
     error = invalid_bars(b)
     if error:
@@ -31,8 +37,14 @@ def build_features(prices, tickers, as_of, calendar):
         if ticker == BENCHMARK:
             continue
         frame = prices.get(ticker)
-        w = (frame.sort_index().loc[:t].reindex(sessions) if frame is not None else
-             pd.DataFrame(index=sessions, columns=b.columns))
+        if frame is None:
+            w = pd.DataFrame(index=sessions, columns=b.columns)
+        else:
+            w = frame[frame.index.isin(sessions)].sort_index()
+            if w.index.duplicated().any():
+                excluded.append(dict(decision_date=t, ticker=ticker, reason="duplicate_dates"))
+                continue
+            w = w.reindex(sessions)
         error = invalid_bars(w)
         if not error and (w.stock_splits.fillna(0) != 0).any():
             error = "split_in_required_window"
@@ -40,8 +52,9 @@ def build_features(prices, tickers, as_of, calendar):
             excluded.append(dict(decision_date=t, ticker=ticker, reason=error))
             continue
         baseline_volume = w.volume.iloc[1:p+1].median()
-        ranges = [(w.high.iloc[j-2:j+1].max() - w.low.iloc[j-2:j+1].min()) / w.close.iloc[j-3]
-                  for j in range(3, p+1)]
+        k = CONSOLIDATION  # every baseline window has the pause's length and uses the close just before it
+        ranges = [(w.high.iloc[j-k+1:j+1].max() - w.low.iloc[j-k+1:j+1].min()) / w.close.iloc[j-k]
+                  for j in range(k, p+1)]
         normal_range = float(np.median(ranges))
         if baseline_volume <= 0 or normal_range <= 0:
             excluded.append(dict(decision_date=t, ticker=ticker, reason="invalid_setup_denominator"))

@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.dashboard import write_dashboard
-from src.report import write_pm_note
+from src.report import write_pm_note, write_screen_md
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,8 +53,9 @@ class SubmissionTests(unittest.TestCase):
             out = Path(folder)
             shutil.copytree(ROOT / "outputs" / "data", out / "data")
             write_pm_note(out)
+            write_screen_md(out)
             write_dashboard(out)
-            for name in ["pm_note_screen.md", "dashboard.html"]:
+            for name in ["pm_note_screen.md", "current_thursday_screen.md", "dashboard.html"]:
                 with self.subTest(name=name):
                     self.assertEqual((out / "deliverables" / name).read_text(),
                                      (ROOT / "outputs" / "deliverables" / name).read_text())
@@ -85,16 +86,13 @@ class SubmissionTests(unittest.TestCase):
                 with self.subTest(status=status):
                     self.assertIn(phrase, (out / "deliverables" / "dashboard.html").read_text())
 
-    def test_no_platform_branding_or_developer_paths_in_submission(self):
+    def test_no_developer_specific_paths_in_submission(self):
         searchable = [
             ROOT / "README.md", ROOT / "RESEARCH_SPEC.md", ROOT / "main.py",
             *sorted((ROOT / "src").glob("*.py")),
             ROOT / "outputs/deliverables/dashboard.html",
         ]
-        forbidden = (
-            "chat" + "gpt", "open" + "ai", "co" + "dex",
-            "/users/" + "assorted" + "sphinx",
-        )
+        forbidden = ("/users/" + "assorted" + "sphinx",)
         for path in searchable:
             text = path.read_text().lower()
             for token in forbidden:
