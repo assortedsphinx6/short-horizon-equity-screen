@@ -9,7 +9,7 @@ def build_features(prices, tickers, as_of, calendar):
     t = pd.Timestamp(as_of)
     if t.weekday() != 3:
         raise ValueError("Decision date must be Thursday")
-    spy = prices[BENCHMARK].loc[:t]
+    spy = prices[BENCHMARK].sort_index().loc[:t]
     if spy.empty or spy.index[-1] != t:
         raise ValueError("Thursday SPY bar missing")
     # 29 observations: preceding close + 20 baseline + 5 impulse + 3 pause.
@@ -31,7 +31,8 @@ def build_features(prices, tickers, as_of, calendar):
         if ticker == BENCHMARK:
             continue
         frame = prices.get(ticker)
-        w = frame.loc[:t].reindex(sessions) if frame is not None else pd.DataFrame(index=sessions, columns=b.columns)
+        w = (frame.sort_index().loc[:t].reindex(sessions) if frame is not None else
+             pd.DataFrame(index=sessions, columns=b.columns))
         error = invalid_bars(w)
         if not error and (w.stock_splits.fillna(0) != 0).any():
             error = "split_in_required_window"

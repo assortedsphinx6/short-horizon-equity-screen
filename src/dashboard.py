@@ -85,7 +85,6 @@ def write_dashboard(out):
     rows = "".join(signal_row(r, v) for r in screen.itertuples()) or "<tr><td colspan='9'>No qualifying names.</td></tr>"
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="60">
 <title>Thursday Screen Dashboard</title><style>{STYLE}</style></head><body>
 <header><b>Thursday-close screen: {escape(meta['decision_date'])}</b>
 <span>Data observed {observed:%Y-%m-%d %H:%M} America/New_York · {escape(meta['snapshot_label'])}</span></header>
@@ -121,7 +120,7 @@ otherwise neutral. Descriptive only.</p>
 <div class="grid">{evidence_panel(v, 'pm_top10', 'Displayed top 10 each week')}
 {evidence_panel(v, 'all_qualified', 'All qualifiers')}</div>
 <div class="panel" style="margin-top:16px"><b>How to read this evidence</b><ul>
-<li>Higher-lean names broke above the range more often, but stall rates were similar and there is no demonstrated return edge.</li>
+<li>Higher- and lower-lean outcome rates are shown above; lean is a descriptive heuristic, not a calibrated probability, and no return edge is claimed.</li>
 <li>A close near the top of Thursday's range leaves less distance to a breakout, so part of that gap is mechanical.</li>
 <li>Names on the same Friday are correlated, so observations are not independent; no trading costs or P&amp;L are modelled.</li></ul></div>
 <h2>Limits</h2>

@@ -40,9 +40,9 @@ All offsets are **trading sessions** ending at a completed Thursday close `t`, o
 
 All three qualification inequalities are strict. The lean is a heuristic summary of Thursday's price action, **not a probability**.
 
-**Where the words could mean two things.** "Excited about" could mean news, social or options attention; here it is proxied by unusual performance relative to SPY plus above-normal volume, which is a market-behavior proxy, not a measure of media attention. "Consolidation" could mean sideways days or declining volume; here it is range compression. "Goes again" could mean an intraday break or any up close; here it is a closing breakout, with the intraday break recorded separately.
+**Where the words could mean two things.** "Excited about" could mean news, social or options attention; here it is proxied by unusual performance relative to SPY plus above-normal volume, which is a market-behavior proxy, not a measure of media attention. "Consolidation" could mean sideways days or declining volume; here it is three-session range compression. It does not require "no new high", so a failed new high still qualifies if the whole three-session range is tighter than the stock's normal range. "Goes again" could mean an intraday break or any up close; here it is a closing breakout, with the intraday break recorded separately.
 
-**RVOL > 1 is deliberately permissive.** It is an above-baseline participation gate, not an extreme-volume threshold. In broad high-volume weeks it filters little (on 24 September, quarterly-expiration volume on 18 September put most stocks above 1); the RVOL percentile inside the excitement score does most of the discrimination for the displayed names.
+**RVOL > 1 is deliberately permissive.** It is an above-baseline participation gate, not an extreme-volume threshold, and broad high-volume weeks make it weakly binding: for 24 September, 481 of 502 eligible constituent securities were above 1 (the impulse window included the 18 September quarterly expiration). The RVOL percentile inside the excitement score does the stronger discrimination for the displayed names.
 
 ## Five-minute reviewer quick start
 
@@ -50,33 +50,31 @@ Python 3.11+. No credentials.
 
 ```sh
 ./run.sh setup       # once: create .venv and install requirements.txt
+./run.sh test        # run the test suite
+./run.sh replay      # rebuild the submitted 24 September screen offline from the frozen fixture
 ./run.sh fresh       # download current data; screen the latest completed Thursday; rebuild all outputs
 ./run.sh dashboard   # serve outputs/dashboard.html locally
-./run.sh test        # run the test suite
 ```
 
-- `./run.sh fresh` always screens the **latest completed Thursday**, refreshes the latest files in `outputs/`, and also preserves a dated copy in `outputs/runs/YYYY-MM-DD/`.
+- `./run.sh fresh` always screens the **latest completed Thursday**, refreshes the latest files in `outputs/`, and saves a dated copy in `outputs/runs/YYYY-MM-DD/`. A dated copy is never overwritten: rerunning the same Thursday later (Yahoo revises adjusted history) keeps the earlier frozen snapshot, prints a note, and records `archive_status` in `outputs/run_metadata.json`.
 - `.venv/bin/python main.py --as-of YYYY-MM-DD` screens a specific completed Thursday (non-Thursdays, holidays and unfinished sessions are rejected).
-- `./run.sh replay` rebuilds the submitted September screen offline into `outputs/replay/`. It prefers a local `cache/`; a fresh clone falls back to the committed frozen input vintage in `fixtures/frozen_2026-09-24/`.
-- `./run.sh update-friday YYYY-MM-DD` verifies the saved Thursday decision hash, downloads the completed Friday bars, and updates only outcomes and reports. It never recalculates Thursday features.
-- `main.py --render-only` rebuilds the PM note and dashboard from saved outputs without any download. `main.py --enrich-only` refreshes the optional SEC context without changing any signal.
+- `./run.sh replay` always rebuilds the submitted 24 September price/volume screen offline into `outputs/replay/` from the committed frozen market-data vintage in `fixtures/frozen_2026-09-24/`, whatever a previous `fresh` run left in `cache/`. The optional SEC response cache is not committed, so replay marks SEC context `unavailable` rather than inventing a zero-filing result.
+- `main.py --render-only` rebuilds the PM notes and dashboard from saved outputs without any download. `main.py --enrich-only` refreshes the optional SEC context without changing any signal.
 - `./run.sh integration` runs the slower full replay contract and checks the exact 503 → 502 → 65 → 10 funnel, ticker order and decision hash.
 - Tested on Python 3.11.4; the exact environment is in `requirements-lock.txt`.
 
-The dashboard is a locally served, auto-refreshing view of the latest saved run. It refreshes the page every 60 seconds and updates whenever the pipeline rewrites `outputs/dashboard.html`; it is not a streaming intraday market-data terminal.
+The dashboard is a static view of the latest saved run, regenerated whenever the pipeline runs; it is not a live market-data terminal.
 
 ## Weekly operating cycle
 
 What the code does today:
 
 1. **Thursday after the close:** `./run.sh fresh` refreshes the current constituent snapshot, downloads enough daily history, selects the latest completed Thursday, validates each required window, recomputes cross-sectional ranks, applies the fixed rules, selects up to ten names, saves the signal tables, adds optional SEC context, and renders the note and dashboard.
-2. **Friday before the close:** the saved observation timestamp keeps Friday `pending`; a partial daily bar cannot become an outcome.
-3. **Friday after the close:** `./run.sh update-friday YYYY-MM-DD` loads the dated Thursday artifact, verifies its hash, downloads Friday bars, and appends continuation, neutral or stall outcomes without recomputing Thursday features. A Friday holiday is skipped; Monday is never substituted.
+2. **Friday:** until the Friday close, the saved observation timestamp keeps Friday `pending`; a partial daily bar cannot become an outcome.
+3. **Next run:** the historical evaluator labels every completed prior Friday (continuation, neutral or stall) with the same fixed rules. A Friday holiday is skipped; Monday is never substituted.
 4. **Following week:** repeat. The target Thursday, universe, data window, eligible population, ranks, qualifiers, leans, SEC context and completed-Friday sample can change. The 5/3/20-session windows, three qualification thresholds, score formulas, top-10 limit and Friday label definitions remain fixed.
 
-This is a repeatable research screener, not a production trading service. Dated signal artifacts and outcome-only Friday updates are automated, but source availability, failure review and any portfolio alert still require operational oversight.
-
-The repository also contains a Thursday-evening GitHub Actions workflow. It runs the fast tests, builds the screen, and retains the complete output directory as a dated workflow artifact for 90 days. It can also be started manually. Repository notification settings control failure alerts.
+This is a repeatable research script that can be run each Thursday, not a production trading service or a live Friday monitor.
 
 ## Core versus optional context
 
@@ -130,9 +128,9 @@ The same fixed rules were rerun on every Thursday from 25 September 2025 to 24 S
 | All qualifiers | 2,448 | 16.7% | 35.2% | 48.1% | +0.03% |
 | Displayed top 10 each week | 460 | 18.7% | 34.1% | 47.2% | −0.03% |
 
-- Higher leans closed above the range far more often than lower leans (all qualifiers 25.3% vs 8.1%; top 10 25.6% vs 8.6%), but **stall rates were similar** (47.8% vs 48.4%; top 10 49.1% vs 44.4%) and there is **no demonstrated return edge**.
+- Higher leans closed above the range far more often than lower leans (all qualifiers 25.3% vs 8.1%; top 10 25.6% vs 8.6%), but they **did not stall less** (all qualifiers 47.8% vs 48.4%; top 10 49.1% vs 44.4%) and there is **no demonstrated return edge**.
 - Part of the breakout gap is mechanical: a Thursday close near the top of the range is already close to the breakout line.
-- Names on the same Friday are correlated, so 460 name-events are closer to 46 weekly observations. No significance is claimed, and no costs, sizing or P&L are modelled.
+- The 2,448 completed candidate events are clustered across only 46 completed Fridays, and names on the same Friday are correlated, so they should not be read as thousands of independent observations. No significance is claimed, and no costs, sizing or P&L are modelled.
 
 Details, exact denominators, lean buckets and exclusions are in `outputs/historical_summary.md`.
 
@@ -146,13 +144,13 @@ Details, exact denominators, lean buckets and exclusions are in `outputs/histori
 
 ## Optional SEC context
 
-After the Yahoo screen is complete, the ten displayed names get a separate SEC EDGAR lookup: target forms (8-K, 10-Q, 10-K, 6-K, 20-F and amendments) accepted between impulse start and Thursday 20:00 New York time, capped at the data observation time. It answers "did a filing coincide with this move?" and **never** affects qualification, ranks, lean or Friday labels. If SEC fails, the screen still completes and the context is marked `unavailable` (which does not mean "no filings"). For 24 September all ten names returned `none`. Historical Thursdays are not enriched. Outputs: `outputs/current_screen_context.{md,csv}`, `outputs/context_metadata.json`.
+After the Yahoo screen is complete, the ten displayed names get a separate SEC EDGAR lookup: target forms (8-K, 10-Q, 10-K, 6-K, 20-F and amendments) accepted between impulse start and Thursday 20:00 New York time, capped at the data observation time. It answers "did a filing coincide with this move?" and **never** affects qualification, ranks, lean or Friday labels. If SEC fails, the screen still completes and the context is marked `unavailable` (which does not mean "no filings"). For 24 September all ten names returned `none`. Historical Thursdays are not enriched. For more reliable live SEC context, set `SEC_USER_AGENT="Name email@example.com"`; if SEC rejects or throttles the request, the context is marked `unavailable` and the core screen is unaffected. Outputs: `outputs/current_screen_context.{md,csv}`, `outputs/context_metadata.json`.
 
 **Not included:** direct news or social-media attention. It is future work, not a runtime dependency.
 
 ## Portfolio alert
 
-`outputs/pm_note_portfolio_alert.md` is a half-page, no-code proposal for "doing well quickly on many positions". It defines doing well (at least 1% net gain per position, qualifying gains at least 0.25% of NAV), quickly (within 60 minutes of entry), many (at least 3 positions and at least 30% of open positions), a five-minute check cadence, and anti-noise rules (two consecutive confirmations, fire once, rearm only after two non-qualifying checks and 60 minutes). It is conceptual and untested; validating it needs internal positions and marks.
+`outputs/pm_note_portfolio_alert.md` is a half-page, no-code proposal for "doing well quickly on many positions". It defines doing well (at least 1% net gain per position, qualifying gains at least 0.25% of NAV), quickly (within 60 minutes of entry; the note explains the alternative "recent acceleration of the existing book" reading), many (at least 3 positions and at least 30% of open positions), a five-minute check cadence, and anti-noise rules (two consecutive confirmations, fire once, rearm only after two non-qualifying checks and 60 minutes). It is conceptual and untested; validating it needs internal positions and marks.
 
 ## Outputs
 
@@ -168,11 +166,9 @@ After the Yahoo screen is complete, the ten displayed names get a separate SEC E
 | `universe_features.csv` | The full ranked population on every Thursday (proves pre-filter ranking) |
 | `thursday_audit.csv`, `feature_exclusions.csv`, `run_metadata.json`, `universe_snapshot.csv` | Per-Thursday status, exclusions, data provenance and the exact constituent list |
 | `current_screen_context.{md,csv}`, `context_metadata.json` | Optional SEC context |
-| `runs/YYYY-MM-DD/` | Dated Thursday artifact; its signal files remain frozen while Friday outcomes may be appended |
+| `runs/YYYY-MM-DD/` | Dated Thursday snapshot; never overwritten by later runs |
 
-Code: `main.py` (command line), `src/pipeline.py` (steps in order), `data.py`, `features.py`, `screen.py`, `evaluate.py`, `report.py`, `dashboard.py`, `enrichment.py`; constants in `config.py`. Tests in `tests/` use synthetic fixtures plus checks on the saved outputs.
-
-The prospective ten-week protocol is isolated under `validation/`. It intentionally contains only the procedure and an empty tracking log today; results must be accumulated after each list is genuinely frozen before Friday.
+Code: `main.py` (command line), `src/pipeline.py` (steps in order), `data.py`, `features.py`, `screen.py`, `evaluate.py`, `report.py`, `dashboard.py`, `enrichment.py`; constants in `config.py`. Tests in `tests/` use synthetic fixtures, an independent numpy oracle for the frozen 24 September screen, and checks on the saved outputs.
 
 ## Limitations
 

@@ -146,4 +146,4 @@ flowchart TD
     A --> INPUTS --> DATE --> VALIDATE --> WINDOWS
 ```
 
-The hard information boundary is Thursday close: features, ranks, qualification, lean and the displayed list use no Friday data. The evaluator reads Friday only after the Thursday decision table has been written and hashed. Each complete run preserves a dated copy under `outputs/runs/YYYY-MM-DD/`; the Friday updater verifies that decision hash and changes outcomes and reports without recalculating Thursday features.
+The hard information boundary is Thursday close: features, ranks, qualification, lean and the displayed list use no Friday data. The evaluator reads Friday only after the Thursday decision table has been written and hashed. Each complete run saves a dated copy under `outputs/runs/YYYY-MM-DD/`; an existing dated copy is never overwritten by a later run of the same Thursday.

@@ -1,6 +1,7 @@
 """Submission-level checks for commands, required artifacts, and dashboard integrity."""
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -18,7 +19,6 @@ class SubmissionTests(unittest.TestCase):
     def test_required_assignment_artifacts_exist(self):
         required = [
             "README.md", "RESEARCH_SPEC.md", "docs/methodology-flow.md",
-            ".github/workflows/weekly-screen.yml", "validation/README.md", "validation/prospective_log.csv",
             "fixtures/frozen_2026-09-24/manifest.json", "fixtures/frozen_2026-09-24/prices.csv.gz",
             "requirements.txt", "main.py", "run.sh",
             "outputs/current_thursday_screen.csv", "outputs/current_thursday_screen.md",
@@ -41,12 +41,12 @@ class SubmissionTests(unittest.TestCase):
     def test_launcher_and_cli_are_valid(self):
         subprocess.run(["bash", "-n", str(ROOT / "run.sh")], check=True)
         result = subprocess.run(
-            [str(ROOT / ".venv/bin/python"), "main.py", "--help"],
+            [sys.executable, "main.py", "--help"],
             cwd=ROOT, check=True, capture_output=True, text=True,
         )
         self.assertIn("--replay", result.stdout)
         self.assertIn("--enrich-only", result.stdout)
-        self.assertIn("--update-friday", result.stdout)
+        self.assertNotIn("--update-friday", result.stdout)
 
     def test_note_and_dashboard_are_exact_views_of_saved_outputs(self):
         with tempfile.TemporaryDirectory() as folder:

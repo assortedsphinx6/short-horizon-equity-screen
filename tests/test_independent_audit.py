@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from src.data import normalize, schedule
+from src.data import normalize
 from src.evaluate import evaluate, summary_tables
 from src.features import build_features
 from src.screen import rank_and_screen
@@ -152,6 +152,13 @@ class ArithmeticAndInputAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Duplicate dates"):
             normalize(duplicate, "A")
 
+
+    def test_feature_build_is_invariant_to_input_date_order_and_extra_columns(self):
+        prices, calendar, thursday = fixture()
+        expected = build_features(prices, ["A"], thursday, calendar)[0]
+        prices["SPY"] = prices["SPY"].sample(frac=1, random_state=3)
+        prices["A"] = prices["A"].assign(provider_note="ignored").sample(frac=1, random_state=5)
+        assert_frame_equal(build_features(prices, ["A"], thursday, calendar)[0], expected)
 
 class SavedOutputAuditTests(unittest.TestCase):
     @classmethod

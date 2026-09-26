@@ -14,7 +14,7 @@ This is a conceptual proposal, not an implemented or tested alert. Agree these p
 
 “Doing well” means a live position has a signed marked-to-market gain of at least 1% of its entry notional, after estimated trading costs. Reverse the price-move direction for shorts. This avoids counting tiny price noise. Together, the qualifying positions must contribute at least 0.25% of current portfolio NAV, so the alert is economically material. Use unrealized gains on remaining live quantity, allocate entry and estimated exit costs to that quantity, and show realized gains separately. Use a weighted entry basis for partial fills; do not reset the entry timestamp when adding to a position.
 
-“Quickly” means entered in the preceding 60 minutes, measuring gain since entry: an actionable intraday horizon. Older positions accelerating recently are outside this definition. “Many” means at least three distinct live positions and at least 30% of all currently open positions meet that age and gain criterion. Three prevents a two-position book from looking broad; 30% prevents a large book triggering on three isolated winners. Consolidate duplicate legs by economic exposure and show sector concentration.
+“Quickly” means entered in the preceding 60 minutes, measuring gain since entry: an actionable intraday horizon. The phrase is ambiguous: if the PM instead means recent acceleration of the existing book, the same framework applies to trailing-hour P&L rather than time since entry. “Many” means at least three distinct live positions and at least 30% of all currently open positions meet that age and gain criterion. Three prevents a two-position book from looking broad; 30% prevents a large book triggering on three isolated winners. Consolidate duplicate legs by economic exposure and show sector concentration.
 
 Check every five minutes during the regular session. Require the full condition on two consecutive checks, then fire once and disarm. Five-minute cadence and two confirmations reduce transient noise. Rearm only after two consecutive nonqualifying checks AND at least 60 minutes since the last alert; then require two fresh qualifying checks. The hour cooldown limits repetition. Unknown or stale data cannot count as a qualifying or nonqualifying check; suppress notification and reset consecutive-check counters until reliable marks return.
 
@@ -50,7 +50,6 @@ def write_screen(out, screen, candidates, date, label, meta):
         "Returns and percentiles are fractions; scores are 0–100, RVOL/compression are ratios. "
         "CSV retains full precision. Lean is a heuristic, not a probability.\n\n" +
         markdown_table(screen[[c for c in cols if c in screen]]) + "\n")
-    (out / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
 
 
 def load_saved_outputs(out):
@@ -119,8 +118,8 @@ def write_pm_note(out):
         sector_text = "Sector mix: no names displayed."
     hi, lo = v["sanity"].loc[("pm_top10", "higher_lean_gt50")], v["sanity"].loc[("pm_top10", "lower_lean_lt50")]
     lines = [
-        f"Thu {meta['decision_date']} close ({meta['snapshot_label']}): {len(v['candidates'])} of "
-        f"{int(v['decision_audit'].eligible_universe_count)} S&P 500 stocks beat SPY over five sessions on "
+        f"Thu {meta['decision_date']} close: {len(v['candidates'])} of "
+        f"{int(v['decision_audit'].eligible_universe_count)} S&P 500 constituent securities beat SPY over five sessions on "
         f"above-baseline volume, then traded a tighter-than-normal three-session range; the {len(screen)} "
         "with the most unusual move plus volume are below.",
         f"Continuation leans, strongest first (lean score, 50 = balanced): {names(cont)}.",

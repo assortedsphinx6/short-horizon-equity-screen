@@ -1,7 +1,6 @@
 """Public constituent snapshot and explicitly adjusted Yahoo daily bars."""
 from io import StringIO
 import json
-from pathlib import Path
 import time
 
 import numpy as np

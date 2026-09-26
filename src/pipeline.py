@@ -16,7 +16,7 @@ from src.data import download, load_cache, save_cache, schedule, universe
 from src.enrichment import enrich_shortlist
 from src.evaluate import evaluate, session_status, summary_tables
 from src.features import build_features
-from src.report import markdown_table, write_history, write_pm_note, write_screen
+from src.report import PORTFOLIO_NOTE, markdown_table, write_history, write_pm_note, write_screen
 from src.screen import rank_and_screen
 
 PACKAGE_NAMES = ["pandas", "numpy", "yfinance", "requests", "lxml", "pandas_market_calendars"]
@@ -27,9 +27,6 @@ def run_research(args):
     now = pd.Timestamp.now(tz="UTC")
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    if args.update_friday:
-        update_saved_friday(output_dir, args.update_friday, now)
-        return
     if args.render_only:
         render_saved_outputs(output_dir)
         return
@@ -207,8 +204,9 @@ def enrich_saved_screen(output_dir, *, offline=False, now=None):
 
 
 def render_saved_outputs(output_dir):
-    """The PM note and dashboard are views of saved outputs, never a second source of numbers."""
+    """The PM notes and dashboard are views of saved outputs, never a second source of numbers."""
     write_pm_note(output_dir)
+    (output_dir / "pm_note_portfolio_alert.md").write_text(PORTFOLIO_NOTE)
     write_dashboard(output_dir)
 
 
@@ -223,17 +221,24 @@ SNAPSHOT_FILES = [
 
 
 def archive_current_run(output_dir):
-    """Keep a dated copy of the completed run while retaining root files as the latest view."""
-    metadata = json.loads((output_dir / "run_metadata.json").read_text())
+    """Keep a dated copy of the completed run; an existing dated copy is never overwritten."""
+    metadata_path = output_dir / "run_metadata.json"
+    metadata = json.loads(metadata_path.read_text())
     dated = output_dir / "runs" / metadata["decision_date"]
     if (dated / "run_metadata.json").exists():
         existing = json.loads((dated / "run_metadata.json").read_text())
         history = dated / "historical_thursday_screens.csv"
-        actual = hashlib.sha256(history.read_bytes()).hexdigest()
-        if actual != existing["thursday_decisions_sha256"]:
+        if hashlib.sha256(history.read_bytes()).hexdigest() != existing["thursday_decisions_sha256"]:
             raise ValueError(f"Existing dated run failed its decision hash: {dated}")
-        if metadata["thursday_decisions_sha256"] != existing["thursday_decisions_sha256"]:
-            raise ValueError(f"Refusing to overwrite a different saved Thursday signal: {dated}")
+        if metadata["thursday_decisions_sha256"] == existing["thursday_decisions_sha256"]:
+            status = "existing_snapshot_identical"
+        else:
+            # Yahoo re-adjusts past prices, so a later run of the same Thursday rarely matches byte for byte.
+            status = "existing_snapshot_preserved"
+            print(f"NOTE: existing archived decision for {metadata['decision_date']} preserved in {dated}; "
+                  "current Yahoo data differs slightly from that frozen vintage. The latest run is in "
+                  f"{output_dir}.", file=sys.stderr)
+        metadata_path.write_text(json.dumps(dict(metadata, archive_status=status), indent=2))
         return dated
     dated.mkdir(parents=True, exist_ok=True)
     for name in SNAPSHOT_FILES:
@@ -241,60 +246,3 @@ def archive_current_run(output_dir):
         if source.exists():
             shutil.copy2(source, dated / name)
     return dated
-
-
-def update_saved_friday(output_dir, decision_date, now):
-    """Join a completed Friday to frozen Thursday decisions without rebuilding their features."""
-    decision = pd.Timestamp(decision_date)
-    if decision.tzinfo is not None or decision != decision.normalize() or decision.weekday() != 3:
-        raise ValueError("--update-friday requires a date-only Thursday, YYYY-MM-DD")
-    dated = output_dir / "runs" / str(decision.date())
-    if not (dated / "run_metadata.json").exists():
-        raise FileNotFoundError(f"No saved Thursday run at {dated}")
-
-    metadata = json.loads((dated / "run_metadata.json").read_text())
-    history_path = dated / "historical_thursday_screens.csv"
-    if hashlib.sha256(history_path.read_bytes()).hexdigest() != metadata["thursday_decisions_sha256"]:
-        raise ValueError("Saved Thursday decisions do not match their recorded hash")
-
-    calendar = schedule(decision, decision + pd.Timedelta(days=4))
-    friday = decision + pd.Timedelta(days=1)
-    if session_status(decision, calendar, now) == "holiday":
-        print(f"{friday.date()} is a market holiday; no Friday outcome added")
-        return
-    if session_status(decision, calendar, now) != "completed":
-        raise ValueError(f"Friday session {friday.date()} is not completed")
-
-    decisions = pd.read_csv(history_path, float_precision="round_trip")
-    target = decisions[pd.to_datetime(decisions.decision_date).eq(decision)]
-    tickers = [BENCHMARK] + sorted(target.ticker.unique().tolist())
-    prices, failures = download(tickers, friday, friday + pd.Timedelta(days=3))
-    if BENCHMARK not in prices:
-        raise RuntimeError("Yahoo SPY Friday download failed; outcomes were not changed")
-    updated = evaluate(target, prices, calendar, now)
-
-    outcomes_path = dated / "friday_outcomes.csv"
-    outcomes = pd.read_csv(outcomes_path, float_precision="round_trip")
-    keep = ~pd.to_datetime(outcomes.decision_date).eq(decision)
-    outcomes = pd.concat([outcomes[keep], updated], ignore_index=True).sort_values(["decision_date", "ticker"])
-    outcomes.to_csv(outcomes_path, index=False)
-
-    audit = pd.read_csv(dated / "thursday_audit.csv", parse_dates=["decision_date"])
-    audit.loc[pd.to_datetime(audit.decision_date).eq(decision), "friday_status"] = "completed"
-    audit.to_csv(dated / "thursday_audit.csv", index=False)
-    exclusions = pd.read_csv(dated / "feature_exclusions.csv", parse_dates=["decision_date"])
-    joined, totals, buckets, sanity = summary_tables(decisions, outcomes)
-    metadata.update(outcome_updated_at_utc=now.isoformat(), friday_download_failures=failures,
-                    completed_name_events=int(outcomes.status.eq("completed").sum()))
-    (dated / "run_metadata.json").write_text(json.dumps(metadata, indent=2))
-    write_history(dated, audit, exclusions, joined, totals, buckets, sanity, metadata)
-    render_saved_outputs(dated)
-
-    root_meta = output_dir / "run_metadata.json"
-    if root_meta.exists() and json.loads(root_meta.read_text()).get("decision_date") == str(decision.date()):
-        for name in SNAPSHOT_FILES:
-            source = dated / name
-            if source.exists():
-                shutil.copy2(source, output_dir / name)
-    (output_dir / "FRIDAY_UPDATE_FAILED.txt").unlink(missing_ok=True)
-    print(f"Updated completed Friday outcomes in {dated.resolve()} without recalculating Thursday features")

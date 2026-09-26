@@ -5,10 +5,9 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 PYTHON="$ROOT/.venv/bin/python"
 
 usage() {
-  echo "Usage: ./run.sh {fresh|replay|update-friday|test|integration|dashboard|setup} [Thursday]"
+  echo "Usage: ./run.sh {fresh|replay|test|integration|dashboard|setup}"
   echo "  fresh      Download current data and rebuild all outputs"
-  echo "  replay     Rebuild from the frozen local data cache"
-  echo "  update-friday YYYY-MM-DD  Append outcomes to a saved Thursday run"
+  echo "  replay     Rebuild the submitted 24 September screen from the committed frozen fixture"
   echo "  test       Run the complete deterministic test suite"
   echo "  integration Run the slower frozen end-to-end contract"
   echo "  dashboard  Open the portfolio-manager dashboard locally"
@@ -43,19 +42,7 @@ case "${1:-}" in
     ;;
   replay)
     require_environment
-    cache_dir="$ROOT/cache"
-    if [[ ! -f "$cache_dir/manifest.json" ]]; then
-      cache_dir="$ROOT/fixtures/frozen_2026-09-24"
-    fi
-    exec "$PYTHON" main.py --replay --cache-dir "$cache_dir" --output-dir outputs/replay
-    ;;
-  update-friday)
-    require_environment
-    if [[ -z "${2:-}" ]]; then
-      echo "Usage: ./run.sh update-friday YYYY-MM-DD" >&2
-      exit 2
-    fi
-    exec "$PYTHON" main.py --update-friday "$2"
+    exec "$PYTHON" main.py --replay --cache-dir "$ROOT/fixtures/frozen_2026-09-24" --output-dir outputs/replay
     ;;
   test)
     require_environment

@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -18,7 +19,7 @@ class FrozenSnapshotIntegrationTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             out = Path(folder) / "outputs"
             subprocess.run([
-                str(ROOT / ".venv/bin/python"), str(ROOT / "main.py"), "--replay",
+                sys.executable, str(ROOT / "main.py"), "--replay",
                 "--cache-dir", str(ROOT / "fixtures/frozen_2026-09-24"),
                 "--output-dir", str(out),
             ], cwd=folder, check=True, capture_output=True, text=True, timeout=180)

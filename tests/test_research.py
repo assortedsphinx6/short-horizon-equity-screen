@@ -53,6 +53,28 @@ class ResearchTests(unittest.TestCase):
                               for j in range(3, 21)])
         self.assertAlmostEqual(f.iloc[0].normal_range, expected)
 
+    def test_rvol_windows_use_t27_to_t8_median_and_t7_to_t3_mean(self):
+        p, cal, t = fixture()
+        # Distinct values: shifting the baseline to t-28..t-9 gives median 109.5, and an impulse
+        # median would be 500, so either mistake changes the answer.
+        p["A"]["volume"] = [1.] + [100. + i for i in range(1, 21)] + [300, 400, 500, 600, 1200] + [5000.] * 3
+        a = build_features(p, ["A"], t, cal)[0].iloc[0]
+        self.assertEqual(a.baseline_volume, 110.5)
+        self.assertEqual(a.impulse_volume, 600.)
+        self.assertAlmostEqual(a.rvol, 600 / 110.5, places=14)
+
+    def test_each_historical_range_uses_its_own_preceding_close(self):
+        p, cal, t = fixture()
+        a = p["A"]
+        for i in range(21):  # a trending baseline makes a shared denominator materially different
+            a.iloc[i] = [50 + 5*i, (50 + 5*i) * 1.02, (50 + 5*i) * .98, 50 + 5*i, 100, 0, 0]
+        own = np.median([(a.high.iloc[j-2:j+1].max() - a.low.iloc[j-2:j+1].min()) / a.close.iloc[j-3]
+                         for j in range(3, 21)])
+        shared = np.median([(a.high.iloc[j-2:j+1].max() - a.low.iloc[j-2:j+1].min()) / a.close.iloc[0]
+                            for j in range(3, 21)])
+        self.assertGreater(abs(own - shared) / own, .5)
+        self.assertAlmostEqual(build_features(p, ["A"], t, cal)[0].iloc[0].normal_range, own, places=14)
+
     def test_friday_cannot_change_any_thursday_decision(self):
         p, cal, t = fixture()
         before = rank_and_screen(build_features(p, ["A", "B"], t, cal)[0])

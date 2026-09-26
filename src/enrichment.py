@@ -28,7 +28,6 @@ class ContextClient:
     """Bounded requests, explicit cache vintage, and offline replay (including failures)."""
     def __init__(self, folder, offline=False):
         self.folder = Path(folder)
-        self.folder.mkdir(parents=True, exist_ok=True)
         self.offline = offline
         self.provenance = []
         self.last_request = 0.
@@ -64,6 +63,7 @@ class ContextClient:
                         break
                     if attempt == 0:
                         time.sleep(1.)
+            self.folder.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps(record, ensure_ascii=False))
         self.provenance.append({k: record[k] for k in ["url", "params", "fetched_at_utc", "http_status", "error"]}
                           | {"cache_file": str(path), "offline_replay": self.offline})
